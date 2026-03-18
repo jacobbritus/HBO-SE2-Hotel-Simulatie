@@ -80,7 +80,6 @@ public class OverviewPage extends SidebarPage {
                 this.statRows.put(statistic, row);
                 sectionPanel.add(row);
                 sectionPanel.add(Box.createVerticalGlue());
-
                 for (StatRow stat : statRows.values()) {
                     stat.update();
                 }
