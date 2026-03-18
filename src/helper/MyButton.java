@@ -38,6 +38,10 @@ public class MyButton extends JButton {
         });
     }
 
+    public void addIcon(Image image) {
+        this.setIcon(new ImageIcon(image));
+    }
+
     @Override
     public void setSelected(boolean selected) {
         if (selected) this.setBackground(Settings.themeColor);

@@ -1,8 +1,7 @@
-package simulation.pages;
+package simulation.tabs;
 import enums.FontWeight;
 import enums.TextSize;
 import events.HotelEvent;
-import helper.FontHelper;
 import helper.MyLabel;
 import settings.Settings;
 import simulation.HotelEventManager;
@@ -11,14 +10,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.util.ArrayList;
 
-public abstract class SidebarPage extends JPanel {
+public abstract class SidebarTab extends JPanel {
     JPanel topSection;
     HotelEventManager hotelEventManager;
 
 
-    public SidebarPage(HotelEventManager hotelEventManager) {
+    public SidebarTab(HotelEventManager hotelEventManager) {
         this.hotelEventManager = hotelEventManager;
     }
 

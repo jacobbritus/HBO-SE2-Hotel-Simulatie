@@ -1,12 +1,14 @@
 package simulation;
 
 import enums.SidebarPageType;
+import helper.ImageHelper;
 import helper.MyButton;
 import settings.Settings;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class SidebarNavigationPanel extends JPanel {
@@ -18,12 +20,14 @@ public class SidebarNavigationPanel extends JPanel {
 
         this.setBorder(new MatteBorder(0, 1, 1, 1, Settings.themeColor3));
 
-        MyButton button =new MyButton("E", _ -> sidebar.openPage(SidebarPageType.EVENTS));
+        MyButton button =new MyButton("E", _ -> sidebar.openTab(SidebarPageType.EVENTS));
 
 
-        MyButton button2 = new MyButton("H", _ -> {
-            sidebar.openPage(SidebarPageType.OVERVIEW);
+        MyButton button2 = new MyButton(null, _ -> {
+            sidebar.openTab(SidebarPageType.OVERVIEW);
         });
+
+//        button.addIcon(ImageHelper.getImage("../images/PathIterator.png"));
 
         this.buttons = new ArrayList<>();
         buttons.add(button);

@@ -1,4 +1,4 @@
-package simulation.pages;
+package simulation.tabs;
 
 import enums.*;
 import events.HotelEvent;
@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class OverviewPage extends SidebarPage {
+public class OverviewTab extends SidebarTab {
     private HashMap<Statistic, StatRow> statRows;
     private MyLabel emptyLabel;
     private HashMap<Statistic, Supplier<Integer>> statisticSupplierHashMap;
     private final Map<Statistic, Integer> statsMap = new EnumMap<>(Statistic.class);
 
-    public OverviewPage(HotelEventManager hotelEventManager) {
+    public OverviewTab(HotelEventManager hotelEventManager) {
         super(hotelEventManager);
         addHeaderSection(SidebarPageType.OVERVIEW.getTitle());
         addUIdesign();

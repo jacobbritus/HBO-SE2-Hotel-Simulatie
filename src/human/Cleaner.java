@@ -68,7 +68,7 @@ public class Cleaner extends Human {
 
                 if (room != null) {
                     this.assignRoom(room);
-                    this.setDestination(this.getLayout().getRandomTile(room));
+                    this.setDestination(this.getLayout().getCenterTile(room));
                 }
             }
             case CLEAN_ROOM -> {

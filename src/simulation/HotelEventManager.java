@@ -76,7 +76,7 @@ public class HotelEventManager extends JPanel {
             hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 10, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 10, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 10, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 10, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 100, i, 0));
         }
 
         hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
@@ -162,19 +162,24 @@ public class HotelEventManager extends JPanel {
         this.speedMultiplierLabel = new MyLabel(this.speedMultipliers[this.activeSpeedMultiplier] + "x",
                 FontWeight.MEDIUM, TextSize.SMALL );
 
-        this.add(new MyButton("-", e -> {
+        MyButton decreaseSpeedButton = new MyButton("-", e -> {
             this.activeSpeedMultiplier = Math.max(this.activeSpeedMultiplier - 1, 0);
             updateSpeed();
-        }));
+        });
+        decreaseSpeedButton.setPreferredSize(new Dimension( 50, 20));
+
+        this.add(decreaseSpeedButton);
 
         this.add(Box.createHorizontalStrut(20));
         this.add(speedMultiplierLabel);
         this.add(Box.createHorizontalStrut(20));
 
-        this.add(new MyButton("+", e -> {
+        MyButton increaseSpeedButton = new MyButton("+", e -> {
             this.activeSpeedMultiplier = Math.min(this.activeSpeedMultiplier + 1, this.speedMultipliers.length - 1);
             updateSpeed();
-        }));
+        });
+        increaseSpeedButton.setPreferredSize(new Dimension( 50, 20));
+        this.add(increaseSpeedButton);
 
         Component x = Box.createVerticalStrut(3);
         this.add(x); // 5px gap

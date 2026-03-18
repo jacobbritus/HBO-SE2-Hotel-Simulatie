@@ -1,4 +1,4 @@
-package simulation.pages;
+package simulation.tabs;
 
 import enums.FontWeight;
 import enums.TextSize;
@@ -16,11 +16,11 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.HashMap;
 
-public class EventsPage extends SidebarPage {
+public class EventsTab extends SidebarTab {
     private JPanel eventsPanel;
     private final HashMap<HotelEvent, JPanel> eventHistory;
 
-    public EventsPage(HotelEventManager hotelEventManager) {
+    public EventsTab(HotelEventManager hotelEventManager) {
         super(hotelEventManager);
         addHeaderSection("Events");
         addUIdesign();

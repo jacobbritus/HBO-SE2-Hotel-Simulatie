@@ -4,9 +4,9 @@ import enums.SidebarPageType;
 import events.HotelEvent;
 import events.HotelEventListener;
 import settings.Settings;
-import simulation.pages.EventsPage;
-import simulation.pages.OverviewPage;
-import simulation.pages.SidebarPage;
+import simulation.tabs.EventsTab;
+import simulation.tabs.OverviewTab;
+import simulation.tabs.SidebarTab;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Sidebar extends JPanel implements HotelEventListener {
     private JLabel emptyLabel;
     private final JPanel pageHolder;
-    private HashMap<SidebarPageType, SidebarPage> pages;
+    private HashMap<SidebarPageType, SidebarTab> pages;
     private SidebarPageType activePage;
     boolean visible;
 
@@ -49,12 +49,12 @@ public class Sidebar extends JPanel implements HotelEventListener {
 
     public void init(HotelEventManager hotelEventManager) {
         this.pages = new HashMap<>();
-        this.pages.put(SidebarPageType.EVENTS, new EventsPage(hotelEventManager));
-        this.pages.put(SidebarPageType.OVERVIEW, new OverviewPage(hotelEventManager));
+        this.pages.put(SidebarPageType.EVENTS, new EventsTab(hotelEventManager));
+        this.pages.put(SidebarPageType.OVERVIEW, new OverviewTab(hotelEventManager));
 
         // Show same page one reset
-        if (activePage != null) this.openPage(activePage);
-        else this.openPage(SidebarPageType.OVERVIEW);
+        if (activePage != null) this.openTab(activePage);
+        else this.openTab(SidebarPageType.OVERVIEW);
     }
 
     public void reset() {
@@ -67,7 +67,7 @@ public class Sidebar extends JPanel implements HotelEventListener {
         this.pages.get(SidebarPageType.OVERVIEW).init();
     }
 
-    public void openPage(SidebarPageType page) {
+    public void openTab(SidebarPageType page) {
         this.activePage = page;
         pageHolder.removeAll();
         pageHolder.add(this.pages.get(page));

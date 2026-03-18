@@ -1,8 +1,6 @@
 package enums;
 
 
-import simulation.pages.SidebarPage;
-
 public enum SidebarPageType {
 //    ROOM("Room "),
 //    ROOMS("Rooms Overview"),

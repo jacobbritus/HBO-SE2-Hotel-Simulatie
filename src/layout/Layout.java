@@ -99,8 +99,11 @@ public class Layout extends JPanel {
         return facilities;
     }
 
-    public Tile getRandomTile(Facility facility) {
+    public Tile getCenterTile(Facility facility) {
+        return facility.getTiles()[Settings.facilityTilesSize/ 2][Settings.facilityTilesSize/ 2];
+    }
 
+    public Tile getRandomTile(Facility facility) {
         Facility randomFacility = facility;
         if (facility == null) {
             int r = (int) (Math.random() * this.facilities.length);
