@@ -74,8 +74,6 @@ public class OverviewPage extends SidebarPage {
                 if (statistic.getSection() != section) continue;
                 String title = statistic.getTitle() ;
                 Supplier<Integer> supplier = statisticSupplierHashMap.get(statistic);
-                System.out.println(title);
-                System.out.println(supplier);
                 StatRow row = new StatRow(title, this, statistic.getUnit(), supplier);
                 this.statRows.put(statistic, row);
                 sectionPanel.add(row);

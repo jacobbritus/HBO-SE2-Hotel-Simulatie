@@ -1,6 +1,7 @@
 package human;
 
 import enums.Role;
+import events.HotelEvent;
 import events.HotelEventListener;
 import facility.Facility;
 import facility.Room;
@@ -20,6 +21,7 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
     private final Role role;
     private boolean isReadyToDespawn;
     private final int id;
+    private final ArrayDeque<HotelEvent> eventQueue;
 
     public Human(Tile tile, Layout layout, Role role, int id) {
         this.role = role;
@@ -27,9 +29,15 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
         this.layout = layout;
         this.isReadyToDespawn = false;
         this.stepsTaken = 0;
+        this.eventQueue = new ArrayDeque<>();
         this.tile = tile;
         this.tile.setHuman(this);
     }
+
+    public ArrayDeque<HotelEvent> getEventQueue() {
+        return eventQueue;
+    }
+
 
     public int getId() {
         return id;
@@ -68,6 +76,10 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
         return destination;
     }
 
+    public void setDestinationPath(ArrayList<Tile> destinationPath) {
+        this.destinationPath = destinationPath;
+    }
+
     public void setDestination(Tile destination) {
         this.destination = destination;
         this.bfs(destination);
@@ -86,9 +98,17 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
         }
     }
 
-    public abstract void onFacilityInteract(Facility facility);
+    public void onFacilityInteract(Facility facility) {
+        if (!this.getEventQueue().isEmpty()) {
+            HotelEvent nextEvent = this.getEventQueue().removeFirst();
+            System.out.println(this.getEventQueue());
+            System.out.println(this.getDestination());
+            this.notify(nextEvent);
+        }
+    };
     public void move() {
         if (stepsTaken < destinationPath.size() - 1) {
+
             Tile tile = destinationPath.get(stepsTaken);
             this.setTile(tile, null);
             stepsTaken++;
@@ -96,10 +116,11 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
             stepsTaken++;
             stepsTaken++;
         } else {
-            this.onFacilityInteract(destination.getFacility());
+            Facility facility = destination.getFacility();
             this.stepsTaken = 0;
             this.destination = null;
             this.destinationPath = null;
+            this.onFacilityInteract(facility);
         }
     }
 

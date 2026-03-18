@@ -11,6 +11,7 @@ import facility.Tile;
 import layout.Layout;
 
 import java.awt.*;
+import java.util.ArrayDeque;
 
 
 public class Guest extends Human {
@@ -20,6 +21,7 @@ public class Guest extends Human {
         super(tile, layout, Role.GUEST, id);
         this.status = GuestStatus.ARRIVED;
         this.getTile().setBackground(this.status.getColor());
+
     }
 
     @Override
@@ -33,6 +35,8 @@ public class Guest extends Human {
             this.setReadyToDespawn();
             this.getTile().revertColor();
         }
+
+        super.onFacilityInteract(facility);
     }
 
     @Override
@@ -61,6 +65,11 @@ public class Guest extends Human {
     @Override
     public void notify(HotelEvent hotelEvent) {
         if (hotelEvent.getHumanId() != null && hotelEvent.getHumanId() != this.getId() && hotelEvent.getData() != 255) return;
+
+        if (this.getDestination() != null) {
+            this.getEventQueue().add(hotelEvent);
+            return;
+        }
 
         switch (hotelEvent.getEventType()) {
             case ASSIGN_ROOM, CHECK_IN -> {

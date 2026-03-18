@@ -25,7 +25,7 @@ public class Cleaner extends Human {
 
     @Override
     public void onFacilityInteract(Facility facility) {
-
+        super.onFacilityInteract(facility);
     }
 
 
@@ -56,12 +56,16 @@ public class Cleaner extends Human {
     public void notify(HotelEvent hotelEvent) {
         if (hotelEvent.getHumanId() != null && hotelEvent.getHumanId() != this.getId() && hotelEvent.getData() != 255) return;
 
+        if (this.getDestination() != null) {
+            this.getEventQueue().add(hotelEvent);
+            return;
+        }
+
         switch (hotelEvent.getEventType()) {
             case GO_DIRTY_ROOM -> {
                 Room room = this.getLayout().getRooms()
                         .stream().filter(r -> r.getStatus() == RoomStatus.DIRTY).findFirst().orElse(null);
 
-                System.out.println(room);
                 if (room != null) {
                     this.assignRoom(room);
                     this.setDestination(this.getLayout().getRandomTile(room));

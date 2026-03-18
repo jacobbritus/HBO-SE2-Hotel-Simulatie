@@ -106,7 +106,6 @@ public class Room extends Facility {
     @Override
     public void mouseClicked() {
         Sidebar sidebar = this.getSimulationController().getSimulationSidebar();
-        System.out.println();
 
 //        if (!sidebar.getOpenedPages().getLast().equals(SidebarPage.ROOM.getTitle()+this.roomNumber)) {
 //            sidebar.openNewPage(SidebarPage.ROOM.getTitle()+this.roomNumber);

@@ -36,7 +36,6 @@ public static Color textColor2 = Color.LIGHT_GRAY;
     // Default = 16
     public static int facilityTilesSize = 16;
 
-
     // Vakjes View
     public static boolean setSquaresAlternatingColors = false;
 

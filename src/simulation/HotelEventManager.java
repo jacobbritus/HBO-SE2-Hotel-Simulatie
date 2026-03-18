@@ -41,11 +41,11 @@ public class HotelEventManager extends JPanel {
         this.setPreferredSize(new Dimension(0, 48));
         this.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0, 0, 1, 0,
                 Settings.themeColor2), new EmptyBorder(10, 10, 10, 10)));
-        this.clockTime = 0;
+        this.clockTime = 60 * 60 * 12;
         this.eventTicks = 0;
         this.simulation = simulation;
         this.sidebar = sidebar;
-        this.timeLabel = new MyLabel("00:00:00", FontWeight.MEDIUM, TextSize.SMALL);
+        this.timeLabel = new MyLabel(Settings.convertTime(clockTime), FontWeight.MEDIUM, TextSize.SMALL);
         this.ticksLabel = new MyLabel("Ticks: 0", FontWeight.MEDIUM, TextSize.SMALL);
         this.ticksLabel.setPreferredSize(new Dimension(75, 30));
 
@@ -69,22 +69,16 @@ public class HotelEventManager extends JPanel {
         return this.simulation.returnLayout().getRooms();
     }
 
-    public int getRoomsByStatus(RoomStatus roomStatus) {
-        return (int) this.getSimulation().returnLayout().getRooms().stream().filter(h -> h.getStatus() == roomStatus).count();
-    }
-
     public void initializeTimer() {
         this.hotelEvents = new ArrayList<>();
 
-        for (int i = 1; i < 17; i++) {
-
+        for (int i = 0; i < 10; i++) {
             hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 10, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 20, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 30, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 150, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 10, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 10, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 10, i, 0));
         }
 
-        System.out.println();
         hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
 
 
