@@ -85,7 +85,6 @@ public class OverviewPage extends SidebarPage {
                 }
             }
         }
-
         this.revalidate();
         this.repaint();
     }
