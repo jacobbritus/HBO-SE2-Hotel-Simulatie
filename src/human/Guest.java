@@ -5,7 +5,9 @@ import enums.GuestStatus;
 import enums.Role;
 import enums.RoomStatus;
 import events.HotelEvent;
+import events.HotelEventType;
 import facility.Facility;
+import facility.Restaurant;
 import facility.Room;
 import facility.Tile;
 import layout.Layout;
@@ -82,6 +84,11 @@ public class Guest extends Human {
             case GO_ROOM -> {
                 if (this.getAssignedRoom() == null) return;
                 this.setDestination(this.getLayout().getCenterTile(this.getAssignedRoom()));
+            }
+            case GO_RESTAURANT -> {
+                Facility restaurant = this.getLayout().getFacilitiesByType(FacilityType.RESTAURANT).getFirst();
+                this.setDestination(this.getLayout().getCenterTile(restaurant));
+                System.out.println(this.getDestination().getFacility());
             }
             case CHECK_OUT -> {
                 if (this.getAssignedRoom() == null) return;

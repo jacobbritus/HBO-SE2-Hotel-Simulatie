@@ -21,6 +21,7 @@ public final class FacilityColors {
     public static HashMap<FacilityState, Color> lobby = new HashMap<>();
     public static HashMap<FacilityState, Color> lift = new HashMap<>();
     public static HashMap<FacilityState, Color> stairs = new HashMap<>();
+    public static HashMap<FacilityState, Color> restaurant = new HashMap<>();
 
     public static void setup() {
         // --- Kamer ---
@@ -57,11 +58,16 @@ public final class FacilityColors {
         stairs.put(FacilityState.DEFAULT1, new Color(255, 248, 225));
         stairs.put(FacilityState.DEFAULT2, new Color(240, 230, 190));
 
+        // --- Trap ---
+        restaurant.put(FacilityState.DEFAULT1, new Color(225, 255, 252));
+        restaurant.put(FacilityState.DEFAULT2, new Color(190, 240, 236));
+
         map.put(FacilityType.ROOM, room);
         map.put(FacilityType.HALL, hall);
         map.put(FacilityType.LOBBY, lobby);
         map.put(FacilityType.LIFT, lift);
         map.put(FacilityType.STAIRS, stairs);
+        map.put(FacilityType.RESTAURANT, restaurant);
     }
 
 

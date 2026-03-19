@@ -4,6 +4,7 @@ import settings.Settings;
 import simulation.Simulation;
 import simulation.HotelEventManager;
 import simulation.Sidebar;
+import simulation.tabs.InfoPanel;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -29,7 +30,6 @@ public class Applicatie extends JFrame implements KeyListener {
     public void startSimulatie(String[][] rauweGrid) {
         simulation = new Simulation(rauweGrid);
         sidebarVisible = true;
-
         this.setLayout(new BorderLayout());
 
 
@@ -40,7 +40,12 @@ public class Applicatie extends JFrame implements KeyListener {
         Sidebar sidebar = new Sidebar();
         simulation.setSimulationSidebar(sidebar);
 
-        HotelEventManager hotelEventManager = new HotelEventManager(simulation, sidebar);
+        InfoPanel infoPanel = new InfoPanel();
+
+        this.add(infoPanel, BorderLayout.SOUTH);
+        scrollPane.setColumnHeaderView(infoPanel);
+
+        HotelEventManager hotelEventManager = new HotelEventManager(simulation, sidebar, infoPanel);
         simulation.setSimulationController(hotelEventManager);
         this.add(hotelEventManager, BorderLayout.NORTH);
 

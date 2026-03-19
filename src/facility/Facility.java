@@ -22,7 +22,7 @@ public abstract class Facility extends JPanel  {
     private MouseAdapter mouseEvents;
     Tile[][] tiles;
 
-    public Facility(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager simC) {
+    public Facility(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager hotelEventManager) {
         this.type = type;
         this.level = 1;
         this.row = row;
@@ -30,7 +30,7 @@ public abstract class Facility extends JPanel  {
         this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));
         this.setBackground(this.getColor(FacilityState.DEFAULT1));
         this.setOpaque(true);
-        this.hotelEventManager = simC;
+        this.hotelEventManager = hotelEventManager;
         this.addTiles();
         superPanel.add(this);
         onMouseEvents();
@@ -41,6 +41,7 @@ public abstract class Facility extends JPanel  {
         this.mouseEvents = new MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 facility.mouseEntered();
+                hotelEventManager.setInfoText(facility.getType().toString());
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 facility.mouseExited();

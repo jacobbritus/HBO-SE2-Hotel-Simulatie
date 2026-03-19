@@ -39,8 +39,6 @@ public class Room extends Facility {
         this.setStatus(RoomStatus.AVAILABLE);
     }
 
-
-
     @Override
     public boolean isAccessible(Human human) {
         return  human == this.occupant || human.getTile().getFacility() == this;

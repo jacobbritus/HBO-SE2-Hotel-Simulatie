@@ -126,8 +126,8 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
         Tile tile = null;
         for (Tile neighbour : tiles) {
             if (neighbour != null) {
-                int f_cost = neighbour.getfcost(this.tile, this.destination);
-                if (lowest == null || tile.getfcost(this.tile, this.destination) < lowest) {
+                int f_cost = neighbour.getfcost(this.destination);
+                if (lowest == null || tile.getfcost(this.destination) < lowest) {
                     tile = neighbour;
                     lowest = f_cost;
                 }
@@ -149,6 +149,8 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
 
         open.add(this.tile);
 
+        int g_cost = 0;
+
         while (!open.isEmpty()) {
             Tile current = returnLowestfCost(open);
             open.remove(current);
@@ -161,18 +163,23 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
             Integer f = null;
             for (Tile neighbour : current.getNeighbours()) {
                 if (neighbour == null || closed.contains(neighbour)
-                        || neighbour.isWalkable(this)|| !accessibleFacility(neighbour) || this.moveFilter(neighbour))
-                {
+                        || neighbour.isWalkable(this)
+                        || !accessibleFacility(neighbour) || this.moveFilter(neighbour)) {
                     continue;
                 }
 
-                int fneighbour = neighbour.getfcost(this.tile, destination);
+                int fneighbour = neighbour.getfcost(destination);
 
                 if (!open.contains(neighbour) && (f == null || f > fneighbour)) {
+                    neighbour.increaseGCost(current.getgCost());
                     f = fneighbour;
                     open.add(neighbour);
                     breadcrumbs.put(neighbour, current);
                 }
+            }
+
+            for (Tile tile : closed) {
+                tile.resetGcost();
             }
         }
     }

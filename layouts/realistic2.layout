@@ -11,6 +11,7 @@
     <label text="Room" row="3" colSpan="4" column="3" />
 
     <label text="Room" row="4" rowSpan="2" column="6" />
+    <label text="Restaurant" row="4"  rowSpan="2" colSpan="3" column="3" />
 
 
     <label text="Empty" row="6" column="0"/>

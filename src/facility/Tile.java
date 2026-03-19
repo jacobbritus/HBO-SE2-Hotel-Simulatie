@@ -19,7 +19,7 @@ public class Tile extends JLabel {
     private Color color;
     private final boolean isEven;
     private Human human;
-    private int gCost;
+    private int gCost = 0;
     private int hCost;
     private final HashMap<Direction, Tile> neighbours;
 
@@ -43,6 +43,18 @@ public class Tile extends JLabel {
             this.setBackground(facility.getColor(FacilityState.DEFAULT2));
             this.color = facility.getColor(FacilityState.DEFAULT2);
         }
+    }
+
+    public void increaseGCost(int currentCost) {
+        this.gCost += currentCost;
+    }
+
+    public void resetGcost() {
+        gCost = 0;
+    }
+
+    public int getgCost() {
+        return gCost;
     }
 
     public boolean isEven() {
@@ -74,11 +86,10 @@ public class Tile extends JLabel {
         };
     }
 
-    public int getfcost(Tile start, Tile destination) {
-        int gCost = Math.abs(this.getGlobalPosition()[0] - start.getGlobalPosition()[0]) + Math.abs(this.getGlobalPosition()[1] - start.getGlobalPosition()[1]);
+    public int getfcost(Tile destination) {
         int hCost = Math.abs(this.getGlobalPosition()[0] - destination.getGlobalPosition()[0]) + Math.abs(this.getGlobalPosition()[1] - destination.getGlobalPosition()[1]);
 
-        return gCost + hCost;
+        return this.gCost + hCost;
     }
 
     public int getRow() {

@@ -11,6 +11,7 @@ import helper.ImageHelper;
 import helper.MyButton;
 import helper.MyLabel;
 import settings.Settings;
+import simulation.tabs.InfoPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -22,6 +23,8 @@ import java.util.Comparator;
 public class HotelEventManager extends JPanel {
     private final Simulation simulation;
     private final Sidebar sidebar;
+    private final InfoPanel infoPanel;
+
     private Timer HTEtimer;
     private MyLabel speedMultiplierLabel;
     private final JLabel timeLabel;
@@ -36,7 +39,7 @@ public class HotelEventManager extends JPanel {
     private int eventTicks;
     private final ArrayList<HotelEventListener> hotelEventListeners;
 
-    public HotelEventManager(Simulation simulation, Sidebar sidebar) {
+    public HotelEventManager(Simulation simulation, Sidebar sidebar, InfoPanel infoPanel) {
         this.setBackground(Settings.themeColor);
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         this.setPreferredSize(new Dimension(0, 48));
@@ -45,6 +48,7 @@ public class HotelEventManager extends JPanel {
         this.clockTime = 60 * 60 * 12;
         this.eventTicks = 0;
         this.simulation = simulation;
+        this.infoPanel = infoPanel;
         this.sidebar = sidebar;
         this.timeLabel = new MyLabel(Settings.convertTime(clockTime), FontWeight.MEDIUM, TextSize.SMALL);
         this.ticksLabel = new MyLabel("Ticks: 0", FontWeight.MEDIUM, TextSize.SMALL);
@@ -63,9 +67,10 @@ public class HotelEventManager extends JPanel {
         return hotelEvents;
     }
 
-    public Simulation getSimulation() {
-        return simulation;
+    public void setInfoText(String text) {
+        this.infoPanel.setText(text);
     }
+
 
     public ArrayList<Facility> getRooms() {
         return this.simulation.returnLayout().getFacilitiesByType(FacilityType.ROOM);
@@ -74,12 +79,15 @@ public class HotelEventManager extends JPanel {
     public void initializeTimer() {
         this.hotelEvents = new ArrayList<>();
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 3, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 5, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 10, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 100, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.GO_RESTAURANT, 30, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 200, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 300, i, 0));
         }
+
 
         hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
 

@@ -90,6 +90,8 @@ public class Layout extends JPanel {
     }
 
     private void addFacilities(String[][] grid, HotelEventManager hotelEventManager) {
+
+
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
 
@@ -101,6 +103,7 @@ public class Layout extends JPanel {
                     case STAIRS -> new Stairs(this, type, r, c, hotelEventManager);
                     case LOBBY -> new Lobby(this, type, r, c, hotelEventManager);
                     case HALL -> new Hall(this, type, r, c, hotelEventManager);
+                    case RESTAURANT -> new Restaurant(this, type, r, c, hotelEventManager);
                     default -> null;
                 };
 
