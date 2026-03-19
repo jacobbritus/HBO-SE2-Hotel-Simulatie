@@ -6,8 +6,8 @@ public final class Settings {
     private Settings() {} // Geen instanties kunnen gemaakt worden.
 
     // Scherm Dimensies
-    public static int schermBreedte = 1440;
-    public static int schermHoogte = 1080;
+    public static int schermBreedte = 1080;
+    public static int schermHoogte = 720;
 
     // Sidebar width
     public static int sidebarWidth = 400;
@@ -43,7 +43,7 @@ public static Color textColor2 = Color.LIGHT_GRAY;
     // Oppervlakte Kleuren
 
     // Milliseconden per tik
-    public static int delay = 1000;
+    public static int delay = 250;
 
     // Guest times
 

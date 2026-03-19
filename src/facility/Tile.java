@@ -7,7 +7,10 @@ import settings.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Tile extends JLabel {
     private final Facility facility;
@@ -31,6 +34,7 @@ public class Tile extends JLabel {
         this.neighbours.put(Direction.DOWN, null);
         this.neighbours.put(Direction.LEFT, null);
         this.neighbours.put(Direction.RIGHT, null);
+        this.setOpaque(true);
         this.isEven = isEven;
         if (isEven || !Settings.setSquaresAlternatingColors) {
             this.setBackground(facility.getColor(FacilityState.DEFAULT1));
@@ -39,8 +43,6 @@ public class Tile extends JLabel {
             this.setBackground(facility.getColor(FacilityState.DEFAULT2));
             this.color = facility.getColor(FacilityState.DEFAULT2);
         }
-
-        this.setOpaque(true);
     }
 
     public boolean isEven() {
@@ -60,25 +62,24 @@ public class Tile extends JLabel {
     }
 
     public boolean isWalkable(Human newHuman) {
-        return human == null || this.facility == null ||
+        return
+//                human == null || this.facility == null ||
                          newHuman.getDestination().getFacility().getLevel() != this.getFacility().getLevel();
     }
 
-    public int getgCost() {
-        return gCost;
+    public int[] getGlobalPosition() {
+        return new int[]{
+                (this.getFacility().getRow() * Settings.facilityTilesSize) + this.row,
+                (this.getFacility().getColumn() * Settings.facilityTilesSize) + this.column
+        };
     }
 
-    public void setgCost(int gCost) {
-        this.gCost = gCost;
-    }
-    public int gethCost() {
-        return hCost;
-    }
+    public int getfcost(Tile start, Tile destination) {
+        int gCost = Math.abs(this.getGlobalPosition()[0] - start.getGlobalPosition()[0]) + Math.abs(this.getGlobalPosition()[1] - start.getGlobalPosition()[1]);
+        int hCost = Math.abs(this.getGlobalPosition()[0] - destination.getGlobalPosition()[0]) + Math.abs(this.getGlobalPosition()[1] - destination.getGlobalPosition()[1]);
 
-    public void sethCost(int hCost) {
-        this.hCost = gCost;
+        return gCost + hCost;
     }
-
 
     public int getRow() {
         return row;
@@ -92,20 +93,10 @@ public class Tile extends JLabel {
         return column;
     }
 
-    public HashMap<Direction, Tile> getNeighbours() {
-        return neighbours;
-    }
+    public HashSet<Tile> getNeighbours() {
 
-    public Integer getGlobalPoint(String axis) {
-        if (axis.equals("y")) {
-            return (this.facility.getRow() * Settings.facilityTilesSize) + this.getRow();
-        } else if (axis.equals("x")) {
-            return (this.facility.getColumn() * Settings.facilityTilesSize) + this.getColumn();
-        } else {
-            return null;
-        }
+        return new HashSet<>(neighbours.values());
     }
-
 
 
     public Facility getFacility() {
@@ -117,10 +108,6 @@ public class Tile extends JLabel {
             revertColor();
         }
         this.human = human;
-    }
-
-    public Tile getNeighbour(Direction direction) {
-        return neighbours.get(direction);
     }
 
     public void setNeighbour(Direction direction, Tile tile) {

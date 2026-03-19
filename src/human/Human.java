@@ -121,13 +121,19 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
         }
     }
 
-    public Tile returnOne(HashSet<Tile> tiles) {
+    public Tile returnLowestfCost(HashSet<Tile> tiles) {
+        Integer lowest = null;
+        Tile tile = null;
         for (Tile neighbour : tiles) {
             if (neighbour != null) {
-                return neighbour;
+                int f_cost = neighbour.getfcost(this.tile, this.destination);
+                if (lowest == null || tile.getfcost(this.tile, this.destination) < lowest) {
+                    tile = neighbour;
+                    lowest = f_cost;
+                }
             }
         }
-        return null;
+        return tile;
     }
 
     public ArrayList<Tile> getDestinationPath() {
@@ -144,7 +150,7 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
         open.add(this.tile);
 
         while (!open.isEmpty()) {
-            Tile current = returnOne(open);
+            Tile current = returnLowestfCost(open);
             open.remove(current);
             closed.add(current);
 
@@ -152,15 +158,21 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
                 retraceSteps(destination, breadcrumbs);
                 break;
             }
-
-            for (Tile neighbour : current.getNeighbours().values()) {
+            Integer f = null;
+            for (Tile neighbour : current.getNeighbours()) {
                 if (neighbour == null || closed.contains(neighbour)
-                        || !neighbour.isWalkable(this) ||
-                        !accessibleFacility(neighbour) || moveFilter(neighbour)) {
+                        || neighbour.isWalkable(this)|| !accessibleFacility(neighbour) || this.moveFilter(neighbour))
+                {
                     continue;
                 }
-                open.add(neighbour);
-                breadcrumbs.put(neighbour, current);
+
+                int fneighbour = neighbour.getfcost(this.tile, destination);
+
+                if (!open.contains(neighbour) && (f == null || f > fneighbour)) {
+                    f = fneighbour;
+                    open.add(neighbour);
+                    breadcrumbs.put(neighbour, current);
+                }
             }
         }
     }

@@ -66,10 +66,9 @@ public class OverviewTab extends SidebarTab {
 
         for (StatisticSection section : StatisticSection.values()) {
             JPanel sectionPanel = new SidebarSection(section.getString());
-            sectionPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            sectionPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 300));
             sectionPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
             this.add(sectionPanel);
-            sectionPanel.add(Box.createVerticalGlue());
             for (Statistic statistic : Statistic.values()) {
                 if (statistic.getSection() != section) continue;
                 String title = statistic.getTitle() ;

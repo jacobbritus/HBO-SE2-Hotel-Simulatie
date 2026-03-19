@@ -6,6 +6,7 @@ import simulation.HotelEventManager;
 import simulation.Sidebar;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -36,7 +37,6 @@ public class Applicatie extends JFrame implements KeyListener {
 
         this.getContentPane().add(scrollPane);
 
-
         Sidebar sidebar = new Sidebar();
         simulation.setSimulationSidebar(sidebar);
 
@@ -50,7 +50,7 @@ public class Applicatie extends JFrame implements KeyListener {
         simulation.init();
         sidebar.init(hotelEventManager);
 
-        simulation.zoom(Settings.facilityTilesSize*  2);
+        simulation.zoom(Settings.facilityTilesSize*  -3);
     }
 
 

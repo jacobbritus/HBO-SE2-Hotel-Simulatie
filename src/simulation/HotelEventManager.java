@@ -48,7 +48,8 @@ public class HotelEventManager extends JPanel {
         this.sidebar = sidebar;
         this.timeLabel = new MyLabel(Settings.convertTime(clockTime), FontWeight.MEDIUM, TextSize.SMALL);
         this.ticksLabel = new MyLabel("Ticks: 0", FontWeight.MEDIUM, TextSize.SMALL);
-        this.ticksLabel.setPreferredSize(new Dimension(75, 30));
+        ticksLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        ticksLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         hotelEventListeners  = new ArrayList<>();
         hotelEventListeners.add(this.simulation);
@@ -73,9 +74,9 @@ public class HotelEventManager extends JPanel {
     public void initializeTimer() {
         this.hotelEvents = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 3, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 10, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 5, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 10, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 100, i, 0));
         }
@@ -114,7 +115,7 @@ public class HotelEventManager extends JPanel {
         this.hotelEventListeners.remove(hotelEventListener);
     }
 
-    private void startSimulation(MyButton startButton, MyButton pauseButton) {
+    private void resetSimulation(MyButton startButton, MyButton pauseButton) {
         this.simulation.reset();
         this.clockTime = 0;
         this.eventTicks = 0;
@@ -130,7 +131,7 @@ public class HotelEventManager extends JPanel {
         startButton.setText("Start");
     }
 
-    private void resetSimulation(MyButton startButton, MyButton pauseButton) {
+    private void startSimulation(MyButton startButton, MyButton pauseButton) {
         this.started = true;
         this.sidebar.start();
         this.HTEtimer.start();
@@ -181,16 +182,16 @@ public class HotelEventManager extends JPanel {
         increaseSpeedButton.setPreferredSize(new Dimension( 50, 20));
         this.add(increaseSpeedButton);
 
-        Component x = Box.createVerticalStrut(3);
-        this.add(x); // 5px gap
+
 
         MyButton pauseButton = createPauseButton();
         MyButton startButton = createStartButton(pauseButton);
 
+        this.add(Box.createHorizontalStrut(20));
         this.add(ticksLabel);
         this.add(Box.createHorizontalStrut(20));
         this.add(timeLabel);
-        this.add(Box.createHorizontalStrut(20));
+        this.add(Box.createHorizontalStrut(25));
         this.add(startButton);
         this.add(pauseButton);
     }
@@ -217,8 +218,8 @@ public class HotelEventManager extends JPanel {
         MyButton startButton = new MyButton("Start", null);
         startButton.setForeground(new Color(99, 196, 74,255));
         startButton.addActionListener(e -> {
-            if (this.started) startSimulation(startButton, pauseButton);
-            else resetSimulation(startButton, pauseButton);
+            if (this.started) resetSimulation(startButton, pauseButton);
+            else startSimulation(startButton, pauseButton);
         });
         return startButton;
     }

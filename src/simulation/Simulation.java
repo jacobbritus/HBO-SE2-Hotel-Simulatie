@@ -12,6 +12,7 @@ import layout.Layout;
 import settings.Settings;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -20,20 +21,18 @@ public class Simulation extends JPanel implements HotelEventListener {
      HotelEventManager hotelEventManager;
      Sidebar sidebar;
      private ArrayList<Human> humans;
-     private final JPanel testPanel;
+     private final JPanel layoutBagroundPanel;
      private final String[][] rauweGrid;
-     private int spawnCooldown;
 
 //
     public Simulation(String[][] rauweGrid) {
         this.setLayout(new BorderLayout()); // Zet layout in het midden
         this.setSize(new Dimension(Settings.schermBreedte, Settings.schermHoogte));
         this.rauweGrid = rauweGrid;
-        this.spawnCooldown = Settings.guestBaseSpawnTime;
-        testPanel = new JPanel(new GridBagLayout());
-        testPanel.setBackground(Settings.achtergrondKleur);
-        testPanel.setOpaque(true);
-        testPanel.setPreferredSize(new Dimension(Settings.schermBreedte , Settings.schermHoogte - 128 ));
+        layoutBagroundPanel = new JPanel(new GridBagLayout());
+        layoutBagroundPanel.setBackground(Settings.achtergrondKleur);
+        layoutBagroundPanel.setOpaque(true);
+        layoutBagroundPanel.setPreferredSize(new Dimension(Settings.schermBreedte , Settings.schermHoogte - 128 ));
     }
 
     public HotelEventManager getSimulationController() {
@@ -51,9 +50,9 @@ public class Simulation extends JPanel implements HotelEventListener {
 
 
     public void init() {
-        layout = new Layout(rauweGrid, this.hotelEventManager);
-        testPanel.add(layout);
-        this.add(testPanel);
+        this.layout = new Layout(rauweGrid, this.hotelEventManager);
+        layoutBagroundPanel.add(layout);
+        this.add(layoutBagroundPanel);
         this.humans = new ArrayList<>();
     }
 
@@ -62,6 +61,10 @@ public class Simulation extends JPanel implements HotelEventListener {
         switch (hotelEvent.getEventType()) {
             case SPAWN_GUEST -> {
                 Tile tile = this.layout.getRandomTile(layout.getFacilitiesByType(FacilityType.LOBBY).getFirst());
+                System.out.println(tile.getRow());
+                System.out.println(tile.getColumn());
+                tile.setBackground(Color.GREEN);
+                System.out.println(tile);
                 Guest guest = new Guest(tile, this.layout, hotelEvent.getHumanId());
                 humans.add(guest);
             }
@@ -74,10 +77,12 @@ public class Simulation extends JPanel implements HotelEventListener {
     }
 
     public void reset() {
-        testPanel.removeAll();
-        init();
+        layoutBagroundPanel.removeAll();
+        this.init();
         this.revalidate();
         this.repaint();
+        this.layout.reload();
+
     }
 
 
@@ -115,15 +120,12 @@ public class Simulation extends JPanel implements HotelEventListener {
         int hoogte = r.length;
         int breedte = r[0].length;
 
-        testPanel.setPreferredSize(new Dimension(
+        layoutBagroundPanel.setPreferredSize(new Dimension(
                 Settings.oppervlakGrootte * breedte *3,
                 Settings.oppervlakGrootte * hoogte *2));
         layout.setPreferredSize(new Dimension(
                 Settings.oppervlakGrootte * breedte,
                 Settings.oppervlakGrootte * hoogte));
-
-        layout.revalidate();
-        layout.repaint();
 
         this.layout.reload();
         this.layout.revalidate();

@@ -28,41 +28,23 @@ public class Layout extends JPanel {
         for (FacilityType facilityType : FacilityType.values()) {
             facilitiesMap.put(facilityType, new ArrayList<>());
         }
-
-
         // GridLayout voor de oppervlakten
         this.setLayout(new GridLayout(height, width));
 
         // Zichtbare grootte
-        this.setPreferredSize(new Dimension(
-                Settings.oppervlakGrootte * width,
-                Settings.oppervlakGrootte * height
-        ));
+        this.setPreferredSize(new Dimension(Settings.oppervlakGrootte * this.facilities[0].length,
+                Settings.oppervlakGrootte * this.facilities.length));
 
         // Add all facilities and connect their tiles
         addFacilities(rawGrid, hotelEventManager);
         connectTiles();
+        revalidate();
+        repaint();
     }
 
     public ArrayList<Facility> getFacilitiesByType(FacilityType facilityType) {
         return facilitiesMap.get(facilityType);
     }
-
-//    public Room getRandomRoom() {
-//        ArrayList<Room> rooms = this.getRooms();
-//        Collections.shuffle(rooms);
-//        Room randomRoom = null;
-//
-//        Room k = null;
-//        for (Room room : rooms) {
-//            if (room.getStatus() == RoomStatus.AVAILABLE) {
-//                randomRoom = room;
-//                break;
-//            }
-//        }
-//
-//        return randomRoom;
-//    }
 
     public Room getNearestRoom(Human human) { // Current applies manhattan distance and filters depending on their role.
         Integer lowestDistance = null;
