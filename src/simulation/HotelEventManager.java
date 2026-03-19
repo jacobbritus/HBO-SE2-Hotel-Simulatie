@@ -1,12 +1,13 @@
 package simulation;
 
+import enums.FacilityType;
 import enums.FontWeight;
-import enums.RoomStatus;
 import enums.TextSize;
 import events.HotelEvent;
 import events.HotelEventListener;
 import events.HotelEventType;
-import facility.Room;
+import facility.Facility;
+import helper.ImageHelper;
 import helper.MyButton;
 import helper.MyLabel;
 import settings.Settings;
@@ -40,7 +41,7 @@ public class HotelEventManager extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         this.setPreferredSize(new Dimension(0, 48));
         this.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0, 0, 1, 0,
-                Settings.themeColor2), new EmptyBorder(10, 10, 10, 10)));
+                Settings.themeColor2), new EmptyBorder(10, 9, 10, 10)));
         this.clockTime = 60 * 60 * 12;
         this.eventTicks = 0;
         this.simulation = simulation;
@@ -65,15 +66,15 @@ public class HotelEventManager extends JPanel {
         return simulation;
     }
 
-    public ArrayList<Room> getRooms() {
-        return this.simulation.returnLayout().getRooms();
+    public ArrayList<Facility> getRooms() {
+        return this.simulation.returnLayout().getFacilitiesByType(FacilityType.ROOM);
     }
 
     public void initializeTimer() {
         this.hotelEvents = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 10, i, 0));
+            hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 3, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 10, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 10, i, 0));
             hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 100, i, 0));
@@ -146,15 +147,14 @@ public class HotelEventManager extends JPanel {
     }
 
     public void addControlButtons() {
-        MyButton menuButton = new MyButton("Close Menu", null);
+        MyButton menuButton = new MyButton(null, null);
 
-        menuButton.addActionListener( e -> {
-            if (this.sidebar.toggle()) {
-                menuButton.setText("Close Menu");
-            } else {
-                menuButton.setText("Open Menu");
-            }
-        });
+        menuButton.addIcon(ImageHelper.getImage(
+                String.format("../images/%s/dockSidebar.png", Settings.colorTheme)
+        ));
+        menuButton.setPreferredSize(new Dimension(48, 48));
+
+        menuButton.addActionListener( e -> sidebar.toggle());
 
         this.add(menuButton);
         this.add(Box.createVerticalStrut(20)); // 5px gap

@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.util.HashMap;
 
-public abstract class Facility extends JPanel implements FacilityMouseInteractions {
+public abstract class Facility extends JPanel  {
     private final FacilityType type;
     private final int row;
     private final int column;
@@ -32,26 +32,24 @@ public abstract class Facility extends JPanel implements FacilityMouseInteractio
         this.setOpaque(true);
         this.hotelEventManager = simC;
         this.addTiles();
-
         superPanel.add(this);
-
-        onMouse();
+        onMouseEvents();
     }
 
-    public void onMouse() {
+    public void onMouseEvents() {
         Facility facility = this;
         this.mouseEvents = new MouseAdapter() {
-        public void mouseEntered(java.awt.event.MouseEvent evt) {
-            facility.mouseEntered();
-        }
-        public void mouseExited(java.awt.event.MouseEvent evt) {
-            facility.mouseExited();
-        }
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            facility.mouseClicked();
-        }
-    };
-    this.addMouseListener(this.mouseEvents);
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                facility.mouseEntered();
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                facility.mouseExited();
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                facility.mouseClicked();
+            }
+        };
+        this.addMouseListener(this.mouseEvents);
     }
 
     public void mouseExited () {this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));}
@@ -102,8 +100,6 @@ public abstract class Facility extends JPanel implements FacilityMouseInteractio
                 Tile tile = new Tile(this,
                         (c + r % 2) % 2 == 0,
                         r, c);
-
-                this.add(tile);
                 tiles[r][c] = tile;
             }
         }

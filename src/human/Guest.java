@@ -85,7 +85,7 @@ public class Guest extends Human {
             }
             case CHECK_OUT -> {
                 if (this.getAssignedRoom() == null) return;
-                this.setDestination(this.getLayout().getRandomTile(this.getLayout().getLobbies().getFirst()));
+                this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
                 this.removeRoom(this.getAssignedRoom());
             }
         }

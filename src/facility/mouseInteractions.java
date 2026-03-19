@@ -1,6 +1,6 @@
 package facility;
 
-public interface FacilityMouseInteractions {
+public interface mouseInteractions {
 
     public void mouseExited();
     public void mouseEntered();

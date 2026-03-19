@@ -101,14 +101,11 @@ public abstract class Human implements RoomOccupant, HotelEventListener {
     public void onFacilityInteract(Facility facility) {
         if (!this.getEventQueue().isEmpty()) {
             HotelEvent nextEvent = this.getEventQueue().removeFirst();
-            System.out.println(this.getEventQueue());
-            System.out.println(this.getDestination());
             this.notify(nextEvent);
         }
     };
     public void move() {
         if (stepsTaken < destinationPath.size() - 1) {
-
             Tile tile = destinationPath.get(stepsTaken);
             this.setTile(tile, null);
             stepsTaken++;

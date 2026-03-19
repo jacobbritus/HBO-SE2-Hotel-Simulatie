@@ -12,19 +12,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class Layout extends JPanel {
     private final Facility[][] facilities;
-    private ArrayList<Lobby> lobbies;
-    private ArrayList<Room> rooms;
+    private Map<FacilityType, ArrayList<Facility>> facilitiesMap;
 
 
     public Layout(String[][] rawGrid, HotelEventManager hotelEventManager) {
         int height = rawGrid.length;
         int width = rawGrid[0].length;
         facilities = new Facility[height][width];
-        lobbies = new ArrayList<>();
-        rooms = new ArrayList<>();
+        facilitiesMap = new EnumMap<>(FacilityType.class);
+        for (FacilityType facilityType : FacilityType.values()) {
+            facilitiesMap.put(facilityType, new ArrayList<>());
+        }
+
 
         // GridLayout voor de oppervlakten
         this.setLayout(new GridLayout(height, width));
@@ -38,57 +42,38 @@ public class Layout extends JPanel {
         // Add all facilities and connect their tiles
         addFacilities(rawGrid, hotelEventManager);
         connectTiles();
-
-        // Store important facilities once
-        for (int r = 0; r < facilities.length; r++) {
-            for (int c = 0; c < facilities[0].length; c++) {
-                Facility facility = this.facilities[r][c];
-                if (facility == null) continue;
-                if (facility.getType() ==  FacilityType.LOBBY) lobbies.add((Lobby) facility);
-                if (facility.getType() ==  FacilityType.ROOM) {
-                    rooms.add((Room) facility);
-                    ((Room) facility).setRoomNumber(490 + c + r + 1);
-                }
-            }
-        }
-
     }
 
-    public ArrayList<Lobby> getLobbies() {
-        Collections.shuffle(this.lobbies);
-        return lobbies;
+    public ArrayList<Facility> getFacilitiesByType(FacilityType facilityType) {
+        return facilitiesMap.get(facilityType);
     }
 
-    public ArrayList<Room> getRooms() {
-        return this.rooms;
-    }
-
-    public Room getRandomRoom() {
-        ArrayList<Room> rooms = this.getRooms();
-        Collections.shuffle(rooms);
-        Room randomRoom = null;
-
-        Room k = null;
-        for (Room room : rooms) {
-            if (room.getStatus() == RoomStatus.AVAILABLE) {
-                randomRoom = room;
-                break;
-            }
-        }
-
-        return randomRoom;
-    }
+//    public Room getRandomRoom() {
+//        ArrayList<Room> rooms = this.getRooms();
+//        Collections.shuffle(rooms);
+//        Room randomRoom = null;
+//
+//        Room k = null;
+//        for (Room room : rooms) {
+//            if (room.getStatus() == RoomStatus.AVAILABLE) {
+//                randomRoom = room;
+//                break;
+//            }
+//        }
+//
+//        return randomRoom;
+//    }
 
     public Room getNearestRoom(Human human) { // Current applies manhattan distance and filters depending on their role.
         Integer lowestDistance = null;
         Room nearestRoom= null;
         Facility current = human.getTile().getFacility();
 
-        for (Room room : rooms) {
+        for (Facility room : getFacilitiesByType(FacilityType.ROOM)) {
             int c = Math.abs(current.getRow() - room.getRow()) + Math.abs(current.getColumn() - room.getColumn());
 
-            if (human.roomFilter(room) && (lowestDistance == null || c < lowestDistance)) {
-                nearestRoom = room;
+            if (human.roomFilter((Room) room) && (lowestDistance == null || c < lowestDistance)) {
+                nearestRoom = (Room) room;
                 lowestDistance = c;
             }
         }
@@ -117,10 +102,8 @@ public class Layout extends JPanel {
             }
         }
 
-        
         int dr = (int) (Math.random() * Settings.facilityTilesSize);
         int dc = (int) (Math.random() * Settings.facilityTilesSize);
-
         return randomFacility.getTiles()[dr][dc];
     }
 
@@ -130,20 +113,22 @@ public class Layout extends JPanel {
 
                 String string = grid[r][c];
                 FacilityType type = FacilityType.getSafe(string.toUpperCase());
-
-                Facility o = switch (type) {
-                    case ROOM ->  new Room(this, type, r, c, hotelEventManager);
-                    case LIFT ->  new Lift(this, type, r, c, hotelEventManager);
-                    case STAIRS ->  new Stairs(this, type, r, c, hotelEventManager);
-                    case LOBBY ->  new Lobby(this, type, r, c, hotelEventManager);
-                    case HALL ->  new Hall(this, type, r, c, hotelEventManager);
-                    default -> null;};
+                Facility o = switch (FacilityType.getSafe(string.toUpperCase())) {
+                    case ROOM -> new Room(this, type, r, c, hotelEventManager);
+                    case LIFT -> new Lift(this, type, r, c, hotelEventManager);
+                    case STAIRS -> new Stairs(this, type, r, c, hotelEventManager);
+                    case LOBBY -> new Lobby(this, type, r, c, hotelEventManager);
+                    case HALL -> new Hall(this, type, r, c, hotelEventManager);
+                    default -> null;
+                };
 
                 if (o == null) {
                     JPanel inaccessible = new JPanel();
                     inaccessible.setBackground(Settings.achtergrondKleur);
                     this.add(inaccessible);
                     continue;
+                } else {
+                    facilitiesMap.get(type).add(o);
                 }
 
                 facilities[r][c] = o;

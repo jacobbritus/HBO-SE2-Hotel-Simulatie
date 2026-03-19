@@ -6,7 +6,7 @@ import static java.util.Map.entry;
 
 public enum Statistic {
     GUEST_COUNT(StatisticSection.Hotel, "Guests", UnitType.NUMERICAL, Map.ofEntries(
-            entry(HotelEventType.CHECK_IN, +1),
+            entry(HotelEventType.SPAWN_GUEST, +1),
             entry(HotelEventType.CHECK_OUT, -1)
     )),
     ROOMS_OCCUPIED(StatisticSection.Hotel, "Occupied Rooms", UnitType.PERCENTAGE_NEGATIVE,  Map.ofEntries(

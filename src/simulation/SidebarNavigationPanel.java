@@ -20,14 +20,19 @@ public class SidebarNavigationPanel extends JPanel {
 
         this.setBorder(new MatteBorder(0, 1, 1, 1, Settings.themeColor3));
 
-        MyButton button =new MyButton("E", _ -> sidebar.openTab(SidebarPageType.EVENTS));
+        MyButton button =new MyButton(null, _ -> sidebar.openTab(SidebarPageType.EVENTS));
 
 
         MyButton button2 = new MyButton(null, _ -> {
             sidebar.openTab(SidebarPageType.OVERVIEW);
         });
 
-//        button.addIcon(ImageHelper.getImage("../images/PathIterator.png"));
+        button.addIcon(ImageHelper.getImage(
+                String.format("../images/%s/event.png", Settings.colorTheme)
+        ));
+        button2.addIcon(ImageHelper.getImage(
+                String.format("../images/%s/home.png", Settings.colorTheme)
+        ));
 
         this.buttons = new ArrayList<>();
         buttons.add(button);

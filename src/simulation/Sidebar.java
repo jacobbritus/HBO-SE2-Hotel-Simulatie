@@ -78,12 +78,7 @@ public class Sidebar extends JPanel implements HotelEventListener {
 
     @Override
     public void notify(HotelEvent hotelEvent) {
-        switch (hotelEvent.getEventType()) {
-            case SPAWN_GUEST -> System.out.println();
-        }
-
         this.pages.get(SidebarPageType.OVERVIEW).reactToEvent(hotelEvent);
         this.pages.get(SidebarPageType.EVENTS).reactToEvent(hotelEvent);
-
     }
 }

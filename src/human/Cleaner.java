@@ -63,8 +63,8 @@ public class Cleaner extends Human {
 
         switch (hotelEvent.getEventType()) {
             case GO_DIRTY_ROOM -> {
-                Room room = this.getLayout().getRooms()
-                        .stream().filter(r -> r.getStatus() == RoomStatus.DIRTY).findFirst().orElse(null);
+                Room room = (Room) this.getLayout().getFacilitiesByType(FacilityType.ROOM)
+                        .stream().filter(r -> ((Room) r).getStatus() == RoomStatus.DIRTY).findFirst().orElse(null);
 
                 if (room != null) {
                     this.assignRoom(room);
@@ -73,7 +73,7 @@ public class Cleaner extends Human {
             }
             case CLEAN_ROOM -> {
                 if (this.getAssignedRoom() == null) return;
-                this.setDestination(this.getLayout().getRandomTile(this.getLayout().getLobbies().getFirst()));
+                this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
                 this.removeRoom(this.getAssignedRoom());
             }
         }

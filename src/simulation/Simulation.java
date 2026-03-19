@@ -1,5 +1,6 @@
 package simulation;
 
+import enums.FacilityType;
 import events.HotelEvent;
 import events.HotelEventListener;
 import facility.Facility;
@@ -60,12 +61,12 @@ public class Simulation extends JPanel implements HotelEventListener {
     public void notify(HotelEvent hotelEvent) {
         switch (hotelEvent.getEventType()) {
             case SPAWN_GUEST -> {
-                Tile tile = this.layout.getRandomTile(layout.getLobbies().getFirst());
+                Tile tile = this.layout.getRandomTile(layout.getFacilitiesByType(FacilityType.LOBBY).getFirst());
                 Guest guest = new Guest(tile, this.layout, hotelEvent.getHumanId());
                 humans.add(guest);
             }
             case SPAWN_CLEANER -> {
-                Tile tile = this.layout.getRandomTile(layout.getLobbies().getFirst());
+                Tile tile = this.layout.getRandomTile(layout.getFacilitiesByType(FacilityType.LOBBY).getFirst());
                 Cleaner cleaner = new Cleaner(tile, this.layout, hotelEvent.getHumanId());
                 humans.add(cleaner);
             }
