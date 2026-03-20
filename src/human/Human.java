@@ -1,6 +1,8 @@
 package human;
 
+import enums.FontWeight;
 import enums.Role;
+import enums.TextSize;
 import events.HotelEvent;
 import events.HotelEventListener;
 import events.HotelEventType;
@@ -8,10 +10,12 @@ import facility.Facility;
 import facility.Room;
 import facility.Tile;
 import facility.mouseInteractions;
+import helper.MyLabel;
 import layout.Layout;
-import settings.Settings;
+import simulation.HotelEventManager;
 
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.util.*;
 
@@ -22,17 +26,20 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     private ArrayList<Tile> destinationPath;
     private Tile destination;
 
+    private final HotelEventManager hotelEventManager;
     private final int id;
     private Room assignedRoom;
     private final Role role;
     private boolean isReadyToDespawn;
     private final ArrayDeque<HotelEvent> eventQueue;
+    private HotelEvent latestEvent;
 
     private int cooldown = 0;
     private boolean hover = false;
-    private MouseAdapter mousevents;
+    private MouseAdapter mouseEvents;
 
-    public Human(Tile tile, Layout layout, Role role, int id) {
+    public Human(Tile tile, Layout layout, Role role, int id, HotelEventManager hotelEventManager) {
+        this.hotelEventManager = hotelEventManager;
         this.role = role;
         this.id = id;
         this.layout = layout;
@@ -45,24 +52,34 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
         this.tile.setHuman(this);
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public HotelEventManager getHotelEventManager() {
+        return hotelEventManager;
+    }
+
     public ArrayDeque<HotelEvent> getEventQueue() {
         return eventQueue;
     }
 
-    public MouseAdapter getMousevents() {
-        return mousevents;
+    public void setLatestEvent(HotelEvent latestEvent) {
+        this.latestEvent = latestEvent;
+    }
+
+    public MouseAdapter getMouseEvents() {
+        return mouseEvents;
     }
 
     public void initMouseEvents() {
         Human human = this;
-        this.mousevents = new MouseAdapter() {
+        this.mouseEvents = new MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 human.mouseEntered();
-
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 human.mouseExited();
-
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 human.mouseClicked();
@@ -78,16 +95,36 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     @Override
     public void mouseEntered() {
         getTile().setBackground(Color.YELLOW);
+        showInfo();
         this.destinationPath = null;
         this.destination = null;
         this.hover = true;
+    }
+
+    public void showInfo() {
+        hotelEventManager.setInfo(null);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 5));
+        panel.setOpaque(false);
+        MyLabel roleLabel = new MyLabel(this.getRole().toString(), FontWeight.REGULAR, TextSize.SMALL);
+        panel.add(roleLabel);
+        MyLabel idLabel = new MyLabel("ID: " + this.getId(), FontWeight.REGULAR, TextSize.SMALL);
+        panel.add(idLabel);
+
+        if (latestEvent != null) {
+        MyLabel latestEventLabel = new MyLabel("Latest Event: " +
+                latestEvent.getEventType().getTitle(), FontWeight.REGULAR, TextSize.SMALL);
+        panel.add(latestEventLabel);
+        }
+
+        getHotelEventManager().setInfo(panel);
     }
 
     @Override
     public void mouseClicked() {
         System.out.println("yes");
         hover = false;
-        this.notify(new HotelEvent(HotelEventType.CHECK_IN, 0, this.id, 0));
+        showInfo();
+        hotelEventManager.assignEvent(this);
     }
 
 
@@ -138,15 +175,15 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     void applyTileMouseInteraction(boolean apply) {
         if (apply) {
             for (Tile tile : tile.getNeighbours()) {
-                if (tile==null) continue;
-                tile.addMouseListener(this.mousevents);
+                if (tile==null || tile.getHuman() != null) continue;
+                tile.addMouseListener(this.mouseEvents);
             }
-            this.tile.addMouseListener(this.mousevents);
+            this.tile.addMouseListener(this.mouseEvents);
         } else {
-            this.tile.removeMouseListener(this.mousevents);
+            this.tile.removeMouseListener(this.mouseEvents);
             for (Tile tile : tile.getNeighbours()) {
                 if (tile==null) continue;
-                tile.removeMouseListener(this.mousevents);
+                tile.removeMouseListener(this.mouseEvents);
             }
         }
     }

@@ -7,7 +7,6 @@ import simulation.Sidebar;
 import simulation.tabs.InfoPanel;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

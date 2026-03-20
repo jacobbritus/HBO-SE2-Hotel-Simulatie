@@ -3,6 +3,7 @@ package simulation;
 import enums.SidebarTabType;
 import events.HotelEvent;
 import events.HotelEventListener;
+import human.Human;
 import settings.Settings;
 import simulation.tabs.EventsTab;
 import simulation.tabs.OverviewTab;
@@ -55,6 +56,11 @@ public class Sidebar extends JPanel implements HotelEventListener {
         // Show same page one reset
         if (activePage != null) this.openTab(activePage);
         else this.openTab(SidebarTabType.OVERVIEW);
+    }
+
+    public void assignEvent(Human human) {
+        if (this.activePage != SidebarTabType.EVENTS) this.openTab(SidebarTabType.EVENTS);
+        ((EventsTab) this.pages.get(SidebarTabType.EVENTS)).assignEvent(human);
     }
 
     public void reset() {

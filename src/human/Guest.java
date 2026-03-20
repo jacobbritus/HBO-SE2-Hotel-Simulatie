@@ -1,31 +1,51 @@
 package human;
 
-import enums.FacilityType;
-import enums.GuestStatus;
-import enums.Role;
-import enums.RoomStatus;
+import enums.*;
 import events.HotelEvent;
+import events.HotelEventType;
 import facility.Facility;
 import facility.Room;
 import facility.Tile;
+import helper.MyLabel;
 import layout.Layout;
+import simulation.HotelEventManager;
+
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayDeque;
 
 
 public class Guest extends Human {
     private GuestStatus status;
 
-    public Guest(Tile tile, Layout layout, int id) {
-        super(tile, layout, Role.GUEST, id);
+    public Guest(Tile tile, Layout layout, int id, HotelEventManager hotelEventManager) {
+        super(tile, layout, Role.GUEST, id, hotelEventManager);
         this.status = GuestStatus.ARRIVED;
         this.getTile().setBackground(this.status.getColor());
 
+    }
+
+    public void addInfo() {
+        MyLabel statusLabel = new MyLabel("STATUS: " + this.status, FontWeight.REGULAR, TextSize.SMALL);
+        getHotelEventManager().addInfo(statusLabel);
+    }
+
+    @Override
+    public void mouseEntered() {
+        super.mouseEntered();
+        addInfo();
     }
 
     @Override
     public void mouseExited() {
         super.mouseExited();
         this.getTile().setBackground(this.status.getColor());
+    }
+
+    @Override
+    public void mouseClicked() {
+        super.mouseClicked();
+        addInfo();
     }
 
     @Override
@@ -53,6 +73,7 @@ public class Guest extends Human {
         this.setAssignedRoom(room);
         room.setOccupant(this, RoomStatus.UNAVAILABLE);
         this.status = GuestStatus.CHECKED_IN;
+        this.getTile().setBackground(Color.GREEN);
     }
 
     public void removeRoom(Room room) {
@@ -77,7 +98,8 @@ public class Guest extends Human {
         }
 
         switch (hotelEvent.getEventType()) {
-            case ASSIGN_ROOM, CHECK_IN -> {
+            case CHECK_IN -> {
+                if (this.getAssignedRoom() != null) return;
                 Room nearestRoom = this.getLayout().getNearestRoom(this);
                 if (nearestRoom == null) {
                     return;
@@ -99,10 +121,14 @@ public class Guest extends Human {
                 this.removeRoom(this.getAssignedRoom());
             }
             case EVACUATE -> {
-                setCooldown(100);
+                setCooldown(500);
                 this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
             }
+            default -> {
+                return;
+            }
         }
+        setLatestEvent(hotelEvent);
     }
 
 

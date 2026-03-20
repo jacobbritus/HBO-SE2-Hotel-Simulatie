@@ -2,6 +2,9 @@ package facility;
 
 import enums.FacilityState;
 import enums.FacilityType;
+import enums.FontWeight;
+import enums.TextSize;
+import helper.MyLabel;
 import human.Human;
 import settings.FacilityColors;
 import settings.Settings;
@@ -40,11 +43,9 @@ public abstract class Facility extends JPanel implements mouseInteractions  {
         this.mouseEvents = new MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 facility.mouseEntered();
-                hotelEventManager.setInfoText(facility.getType().toString());
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 facility.mouseExited();
-                hotelEventManager.setInfoText(" ");
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 facility.mouseClicked();
@@ -53,8 +54,19 @@ public abstract class Facility extends JPanel implements mouseInteractions  {
         this.addMouseListener(this.mouseEvents);
     }
 
-    public void mouseExited () {this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));}
-    public void mouseEntered () { this.setBorder(new LineBorder(Color.YELLOW, 2));}
+    public void mouseExited () {
+        this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));
+        hotelEventManager.setInfo(null);
+    }
+    public void mouseEntered () {
+        this.setBorder(new LineBorder(Color.YELLOW, 2));
+        hotelEventManager.setInfo(null);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel.setOpaque(false);
+        MyLabel textLabel = new MyLabel(this.getType().toString(), FontWeight.REGULAR, TextSize.SMALL);
+        panel.add(textLabel);
+        hotelEventManager.setInfo(panel);
+    }
     public void mouseClicked() {}
 
     public FacilityType getType() {

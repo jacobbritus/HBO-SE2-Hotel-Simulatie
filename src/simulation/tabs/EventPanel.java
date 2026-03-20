@@ -4,6 +4,7 @@ import enums.FontWeight;
 import enums.TextSize;
 import events.HotelEvent;
 import helper.MyLabel;
+import human.Human;
 import settings.Settings;
 
 import javax.swing.*;
@@ -21,21 +22,21 @@ public class EventPanel extends JPanel {
     JTextField dataField;
     HotelEvent event;
 
-    public EventPanel(HotelEvent hotelEvent, boolean isNew, EventsTab eventsTab) {
+    public EventPanel(HotelEvent hotelEvent, boolean isNew, EventsTab eventsTab, Human selectedHuman) {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setOpaque(true);
         this.setBackground(Settings.themeColor);
 
         event = hotelEvent;
 
-        JLabel title = new MyLabel(hotelEvent.getEventType().getTitle(), FontWeight.MEDIUM, TextSize.SMALL);
+        JLabel title = new MyLabel(hotelEvent.getEventType().getTitle(), FontWeight.SEMIBOLD, TextSize.SMALL);
         this.add(title);
         title.setPreferredSize(new Dimension(150   , 40));
 
         this.add(Box.createHorizontalGlue());
         JLabel idLabel = new MyLabel("ID: ", FontWeight.MEDIUM, TextSize.SMALL);
         this.add(idLabel);
-        if (isNew) {
+        if (isNew && selectedHuman == null) {
             this.idField = returnTextField(hotelEvent.getHumanId());
             this.add(idField);
         } else {
@@ -79,8 +80,14 @@ public class EventPanel extends JPanel {
                 super.mouseClicked(e);
                 if (event.getTime() < eventsTab.getHotelEventManager().getEventTicks()) return;
                 if (isNew) {
+                    if (ticksField.getText().isEmpty() ||dataField.getText().isEmpty()
+                            || (selectedHuman == null && idField.getText().isEmpty()) ) return;
+
+                    if (selectedHuman == null) {
+                        event.setHumanId(Integer.parseInt(idField.getText()));
+                    }
+
                     event.setTime(Integer.parseInt(ticksField.getText()));
-                    event.setHumanId(Integer.parseInt(idField.getText()));
                     event.setData(Integer.parseInt(dataField.getText()));
                     eventsTab.addNewEvent(event);
                 }

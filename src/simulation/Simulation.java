@@ -61,12 +61,12 @@ public class Simulation extends JPanel implements HotelEventListener {
         switch (hotelEvent.getEventType()) {
             case SPAWN_GUEST -> {
                 Tile tile = this.layout.getRandomTile(layout.getFacilitiesByType(FacilityType.LOBBY).getFirst());
-                Guest guest = new Guest(tile, this.layout, hotelEvent.getHumanId());
+                Guest guest = new Guest(tile, this.layout, hotelEvent.getHumanId(), hotelEventManager);
                 humans.add(guest);
             }
             case SPAWN_CLEANER -> {
                 Tile tile = this.layout.getRandomTile(layout.getFacilitiesByType(FacilityType.LOBBY).getFirst());
-                Cleaner cleaner = new Cleaner(tile, this.layout, hotelEvent.getHumanId());
+                Cleaner cleaner = new Cleaner(tile, this.layout, hotelEvent.getHumanId(), hotelEventManager);
                 humans.add(cleaner);
             }
         }

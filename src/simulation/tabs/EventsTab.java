@@ -1,9 +1,11 @@
 package simulation.tabs;
 
 import events.HotelEvent;
+import events.HotelEventListener;
 import events.HotelEventType;
 import helper.MyButton;
 import helper.MyScrollPane;
+import human.Human;
 import settings.Settings;
 import simulation.HotelEventManager;
 
@@ -17,6 +19,7 @@ public class EventsTab extends SidebarTab {
     private HashMap<HotelEventType, JPanel> eventForm;
     private boolean customizing;
     private MyButton customizeButton;
+    private Human selectedHuman;
 
     public EventsTab(HotelEventManager hotelEventManager) {
         super(hotelEventManager);
@@ -26,20 +29,26 @@ public class EventsTab extends SidebarTab {
 
         customizeButton = new MyButton("Add", null);
         customizeButton.addActionListener(_ -> {
-            titleLabel.setText("New Event");
             eventsContainer.removeAll();
 
             if (customizing) {
                 customizeButton.setText("Add");
+                titleLabel.setText("Events");
                 if(hotelEventManager.isStarted()) hotelEventManager.getHTEtimer().start();
                 customizing = false;
+                selectedHuman = null;
                 addExistingEvents();
             } else {
+                if (selectedHuman == null) titleLabel.setText("New Event");
+                else titleLabel.setText(selectedHuman.getRole() + " " + selectedHuman.getId());
                 customizeButton.setText("Cancel");
                 if(hotelEventManager.isStarted()) hotelEventManager.getHTEtimer().stop();
                 customizing = true;
                 addNewEventOptions();
             }
+
+
+
             eventsContainer.revalidate();
             eventsContainer.repaint();
         });
@@ -57,26 +66,32 @@ public class EventsTab extends SidebarTab {
         this.revalidate();
     }
 
+    public void assignEvent(Human human) {
+        this.selectedHuman = human;
+        customizing = false;
+        customizeButton.doClick();
+    }
+
     public void addNewEventOptions() {
+        int id = selectedHuman != null ? selectedHuman.getId() : 0;
         for (HotelEventType type : HotelEventType.values()) {
+            if (selectedHuman != null && type.getRelatedRole() != selectedHuman.getRole()) continue;
             HotelEvent event = new HotelEvent(type,
                     hotelEventManager.getEventTicks() + 20,
-                    0,
+                    id,
                     0);
-            EventPanel eventPanel = new EventPanel (event, true, this);
+            EventPanel eventPanel = new EventPanel (event, true, this, selectedHuman);
             eventsContainer.add(eventPanel);
             eventForm.put(type, eventPanel);
         }
     }
 
     public void addNewEvent(HotelEvent event) {
-        System.out.println(event.getTime());
         if(hotelEventManager.isStarted()) hotelEventManager.getHTEtimer().start();
         hotelEventManager.addHotelEvent(event);
         eventsContainer.removeAll();
-        customizing = false;
-        customizeButton.setText("New Event");
-        addExistingEvents();
+        customizeButton.doClick();
+        SwingUtilities.getWindowAncestor(this).requestFocus();
     }
 
     @Override
@@ -120,7 +135,7 @@ public class EventsTab extends SidebarTab {
 
     @Override
     public void reactToEvent(HotelEvent hotelEvent) {
-        JPanel eventPanel = new EventPanel(hotelEvent, false, this);
+        JPanel eventPanel = new EventPanel(hotelEvent, false, this, selectedHuman);
         if (!eventHistory.containsKey(hotelEvent) && hotelEvent.getTime() >= getHotelEventManager().getEventTicks() ) {
             this.eventsContainer.add(eventPanel);
         } else {

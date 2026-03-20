@@ -10,6 +10,7 @@ import facility.Facility;
 import helper.ImageHelper;
 import helper.MyButton;
 import helper.MyLabel;
+import human.Human;
 import settings.Settings;
 import simulation.tabs.InfoPanel;
 
@@ -18,7 +19,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class HotelEventManager extends JPanel {
@@ -68,6 +68,10 @@ public class HotelEventManager extends JPanel {
         return hotelEvents;
     }
 
+    public void assignEvent(Human human) {
+        sidebar.assignEvent(human);
+    }
+
     public void addHotelEvent(HotelEvent hotelEvent) {
         this.hotelEvents.add(hotelEvent);
         hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
@@ -90,10 +94,13 @@ public class HotelEventManager extends JPanel {
         return eventTicks;
     }
 
-    public void setInfoText(String text) {
-        this.infoPanel.setText(text);
+    public void setInfo(JPanel panel) {
+        this.infoPanel.setInfo(panel);
     }
 
+    public void addInfo(MyLabel myLabel) {
+        this.infoPanel.addInfo(myLabel);
+    }
 
     public ArrayList<Facility> getRooms() {
         return this.simulation.returnLayout().getFacilitiesByType(FacilityType.ROOM);

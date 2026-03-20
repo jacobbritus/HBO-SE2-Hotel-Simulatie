@@ -9,13 +9,20 @@ import facility.Room;
 import facility.Tile;
 import layout.Layout;
 import settings.Settings;
+import simulation.HotelEventManager;
 
 import java.awt.*;
 
 public class Cleaner extends Human {
 
-    public Cleaner(Tile tile, Layout layout, int id) {
-        super(tile, layout, Role.CLEANER, id);
+    public Cleaner(Tile tile, Layout layout, int id, HotelEventManager hotelEventManager) {
+        super(tile, layout, Role.CLEANER, id, hotelEventManager);
+        this.getTile().setBackground(Color.BLUE);
+    }
+
+    @Override
+    public void mouseExited() {
+        super.mouseExited();
         this.getTile().setBackground(Color.BLUE);
     }
 
@@ -78,10 +85,15 @@ public class Cleaner extends Human {
                 this.removeRoom(this.getAssignedRoom());
             }
             case EVACUATE -> {
-                setCooldown(100);
+                setCooldown(500);
                 this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
             }
+
+            default -> {
+                return;
+            }
         }
+        setLatestEvent(hotelEvent);
     }
 }
 
