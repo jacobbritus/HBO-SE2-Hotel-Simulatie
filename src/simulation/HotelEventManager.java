@@ -46,7 +46,7 @@ public class HotelEventManager extends JPanel {
         this.setPreferredSize(new Dimension(0, 48));
         this.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0, 0, 1, 0,
                 Settings.themeColor2), new EmptyBorder(10, 9, 10, 10)));
-        this.clockTime = 60 * 60 * 12;
+        this.clockTime = 0;
         this.eventTicks = 0;
         this.simulation = simulation;
         this.infoPanel = infoPanel;
@@ -70,6 +70,10 @@ public class HotelEventManager extends JPanel {
 
     public void assignEvent(Human human) {
         sidebar.assignEvent(human);
+    }
+
+    public void clearHotelEvents() {
+        this.hotelEvents = new ArrayList<>();
     }
 
     public void addHotelEvent(HotelEvent hotelEvent) {
@@ -171,8 +175,8 @@ public class HotelEventManager extends JPanel {
         this.sidebar.start();
         this.HTEtimer.start();
 
-        startButton.setText("Reset");
-        startButton.setForeground(Color.RED);
+        startButton.setText("Replay Events");
+        startButton.setForeground(Color.MAGENTA);
         pauseButton.setForeground(Settings.textColor);
     }
 

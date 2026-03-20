@@ -31,7 +31,6 @@ public class Applicatie extends JFrame implements KeyListener {
         sidebarVisible = true;
         this.setLayout(new BorderLayout());
 
-
         JScrollPane scrollPane = new MyScrollPane(simulation);
 
         this.getContentPane().add(scrollPane);

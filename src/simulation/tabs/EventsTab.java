@@ -19,6 +19,7 @@ public class EventsTab extends SidebarTab {
     private HashMap<HotelEventType, JPanel> eventForm;
     private boolean customizing;
     private MyButton customizeButton;
+    private MyButton clearButton;
     private Human selectedHuman;
 
     public EventsTab(HotelEventManager hotelEventManager) {
@@ -26,6 +27,11 @@ public class EventsTab extends SidebarTab {
         addHeaderSection("Events", BoxLayout.X_AXIS);
         addUIdesign();
         eventForm = new HashMap<>();
+
+        clearButton = new MyButton("Clear", _ -> {
+            clearEvents();
+        });
+        clearButton.setForeground(Color.RED);
 
         customizeButton = new MyButton("Add", null);
         customizeButton.addActionListener(_ -> {
@@ -37,8 +43,13 @@ public class EventsTab extends SidebarTab {
                 if(hotelEventManager.isStarted()) hotelEventManager.getHTEtimer().start();
                 customizing = false;
                 selectedHuman = null;
+                topSection.add(clearButton);
+                topSection.remove(customizeButton);
+                topSection.add(customizeButton);
+
                 addExistingEvents();
             } else {
+                topSection.remove(clearButton);
                 if (selectedHuman == null) titleLabel.setText("New Event");
                 else titleLabel.setText(selectedHuman.getRole() + " " + selectedHuman.getId());
                 customizeButton.setText("Cancel");
@@ -54,13 +65,14 @@ public class EventsTab extends SidebarTab {
         });
 
         customizeButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        this.topSection.add(customizeButton
-        );
+        this.topSection.add(clearButton);
+        this.topSection.add(customizeButton);
 
         JScrollPane scrollPane = createScrollPanel();
         scrollPane.setPreferredSize(new Dimension(320, 320));
         this.add(scrollPane);
         addExistingEvents();
+
 
         this.repaint();
         this.revalidate();
@@ -84,6 +96,13 @@ public class EventsTab extends SidebarTab {
             eventsContainer.add(eventPanel);
             eventForm.put(type, eventPanel);
         }
+    }
+
+    public void clearEvents() {
+        eventsContainer.removeAll();
+        hotelEventManager.clearHotelEvents();
+        eventsContainer.revalidate();
+        eventsContainer.repaint();
     }
 
     public void addNewEvent(HotelEvent event) {
