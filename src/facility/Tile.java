@@ -115,9 +115,7 @@ public class Tile extends JLabel {
     }
 
     public void setHuman(Human human) {
-        if (human == null) {
-            revertColor();
-        }
+        if (human == null) {revertColor();}
         this.human = human;
     }
 

@@ -23,7 +23,7 @@ public class OverviewTab extends SidebarTab {
 
     public OverviewTab(HotelEventManager hotelEventManager) {
         super(hotelEventManager);
-        addHeaderSection(SidebarPageType.OVERVIEW.getTitle());
+        addHeaderSection(SidebarTabType.OVERVIEW.getTitle(), BoxLayout.Y_AXIS);
         addUIdesign();
         labelOnPreStart();
         initStatValues();
@@ -67,7 +67,7 @@ public class OverviewTab extends SidebarTab {
         for (StatisticSection section : StatisticSection.values()) {
             JPanel sectionPanel = new SidebarSection(section.getString());
             sectionPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 300));
-            sectionPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+            sectionPanel.setBorder(new EmptyBorder(5, 20, 20, 20));
             this.add(sectionPanel);
             for (Statistic statistic : Statistic.values()) {
                 if (statistic.getSection() != section) continue;

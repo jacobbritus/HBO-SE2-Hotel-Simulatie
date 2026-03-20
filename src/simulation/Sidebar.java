@@ -1,6 +1,6 @@
 package simulation;
 
-import enums.SidebarPageType;
+import enums.SidebarTabType;
 import events.HotelEvent;
 import events.HotelEventListener;
 import settings.Settings;
@@ -16,8 +16,8 @@ import java.util.HashMap;
 public class Sidebar extends JPanel implements HotelEventListener {
     private JLabel emptyLabel;
     private final JPanel pageHolder;
-    private HashMap<SidebarPageType, SidebarTab> pages;
-    private SidebarPageType activePage;
+    private HashMap<SidebarTabType, SidebarTab> pages;
+    private SidebarTabType activePage;
     boolean visible;
 
     public Sidebar() {
@@ -49,12 +49,12 @@ public class Sidebar extends JPanel implements HotelEventListener {
 
     public void init(HotelEventManager hotelEventManager) {
         this.pages = new HashMap<>();
-        this.pages.put(SidebarPageType.EVENTS, new EventsTab(hotelEventManager));
-        this.pages.put(SidebarPageType.OVERVIEW, new OverviewTab(hotelEventManager));
+        this.pages.put(SidebarTabType.EVENTS, new EventsTab(hotelEventManager));
+        this.pages.put(SidebarTabType.OVERVIEW, new OverviewTab(hotelEventManager));
 
         // Show same page one reset
         if (activePage != null) this.openTab(activePage);
-        else this.openTab(SidebarPageType.OVERVIEW);
+        else this.openTab(SidebarTabType.OVERVIEW);
     }
 
     public void reset() {
@@ -64,10 +64,10 @@ public class Sidebar extends JPanel implements HotelEventListener {
     }
 
     public void start() {
-        this.pages.get(SidebarPageType.OVERVIEW).init();
+        this.pages.get(SidebarTabType.OVERVIEW).init();
     }
 
-    public void openTab(SidebarPageType page) {
+    public void openTab(SidebarTabType page) {
         this.activePage = page;
         pageHolder.removeAll();
         pageHolder.add(this.pages.get(page));
@@ -78,7 +78,7 @@ public class Sidebar extends JPanel implements HotelEventListener {
 
     @Override
     public void notify(HotelEvent hotelEvent) {
-        this.pages.get(SidebarPageType.OVERVIEW).reactToEvent(hotelEvent);
-        this.pages.get(SidebarPageType.EVENTS).reactToEvent(hotelEvent);
+        this.pages.get(SidebarTabType.OVERVIEW).reactToEvent(hotelEvent);
+        this.pages.get(SidebarTabType.EVENTS).reactToEvent(hotelEvent);
     }
 }

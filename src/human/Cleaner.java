@@ -24,14 +24,13 @@ public class Cleaner extends Human {
     }
 
     @Override
-    public void onFacilityInteract(Facility facility) {
-        super.onFacilityInteract(facility);
+    public boolean applyRandomMovement() {
+        return false;
     }
 
-
     @Override
-    public boolean moveFilter(Tile neighbour) {
-        return false;
+    public void onFacilityInteract(Facility facility) {
+        super.onFacilityInteract(facility);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class Cleaner extends Human {
                 Room room = (Room) this.getLayout().getFacilitiesByType(FacilityType.ROOM)
                         .stream().filter(r -> ((Room) r).getStatus() == RoomStatus.DIRTY).findFirst().orElse(null);
 
-                if (room != null) {
+                if (room != null && this.getAssignedRoom() == null) {
                     this.assignRoom(room);
                     this.setDestination(this.getLayout().getCenterTile(room));
                 }

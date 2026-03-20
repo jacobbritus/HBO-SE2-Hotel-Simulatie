@@ -1,7 +1,7 @@
 package enums;
 
 
-public enum SidebarPageType {
+public enum SidebarTabType {
 //    ROOM("Room "),
 //    ROOMS("Rooms Overview"),
 //    GUESTS("Guests"),
@@ -13,7 +13,7 @@ public enum SidebarPageType {
 
     public final String title;
 
-    SidebarPageType(String title) {
+    SidebarTabType(String title) {
         this.title = title;
     }
 

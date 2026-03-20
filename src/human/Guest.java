@@ -27,6 +27,12 @@ public class Guest extends Human {
     }
 
     @Override
+    public void mouseExited() {
+        super.mouseExited();
+        this.getTile().setBackground(this.status.getColor());
+    }
+
+    @Override
     public void setTile(Tile newTile, Color color) {
         super.setTile(newTile, this.status.getColor());
     }
@@ -42,8 +48,8 @@ public class Guest extends Human {
     }
 
     @Override
-    public boolean moveFilter(Tile neighbour) {
-        return false;
+    public boolean applyRandomMovement() {
+        return this.status != GuestStatus.ARRIVED;
     }
 
     @Override
@@ -97,4 +103,6 @@ public class Guest extends Human {
             }
         }
     }
+
+
 }

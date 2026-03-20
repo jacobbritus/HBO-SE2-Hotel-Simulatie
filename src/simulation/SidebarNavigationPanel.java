@@ -1,6 +1,6 @@
 package simulation;
 
-import enums.SidebarPageType;
+import enums.SidebarTabType;
 import helper.ImageHelper;
 import helper.MyButton;
 import settings.Settings;
@@ -8,23 +8,23 @@ import settings.Settings;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 
 public class SidebarNavigationPanel extends JPanel {
     ArrayList<MyButton> buttons;
     public SidebarNavigationPanel(Sidebar sidebar) {
         this.setOpaque(true);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(Settings.themeColor2);
-        this.setPreferredSize(new Dimension(Settings.sidebarWidth / 6, Settings.schermHoogte));
+        this.setPreferredSize(new Dimension(Settings.sidebarWidth / 8, Settings.schermHoogte));
 
         this.setBorder(new MatteBorder(0, 1, 1, 1, Settings.themeColor3));
 
-        MyButton button =new MyButton(null, _ -> sidebar.openTab(SidebarPageType.EVENTS));
+        MyButton button =new MyButton(null, _ -> sidebar.openTab(SidebarTabType.EVENTS));
 
 
         MyButton button2 = new MyButton(null, _ -> {
-            sidebar.openTab(SidebarPageType.OVERVIEW);
+            sidebar.openTab(SidebarTabType.OVERVIEW);
         });
 
         button.addIcon(ImageHelper.getImage(
@@ -40,12 +40,13 @@ public class SidebarNavigationPanel extends JPanel {
         button2.setSelected(true);
         customizeButtons();
         this.add(button2);
+//        this.add(Box.createVerticalStrut(10));
         this.add(button);
     }
 
     public void customizeButtons() {
         for (MyButton b : this.buttons) {
-            b.setPreferredSize(new Dimension(55, 55));
+            b.setPreferredSize(new Dimension(32, 32));
             b.addActionListener(_ -> {
                 b.setSelected(true);
                 for (MyButton other : this.buttons) {

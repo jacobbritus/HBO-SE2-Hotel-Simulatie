@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class HotelEventManager extends JPanel {
@@ -67,6 +68,19 @@ public class HotelEventManager extends JPanel {
         return hotelEvents;
     }
 
+    public Timer getHTEtimer() {
+        return HTEtimer;
+    }
+
+    public int getEventTicks() {
+        return eventTicks;
+    }
+
+    public void addHotelEvent(HotelEvent hotelEvent) {
+        this.hotelEvents.add(hotelEvent);
+        hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
+    }
+
     public void setInfoText(String text) {
         this.infoPanel.setText(text);
     }
@@ -79,13 +93,10 @@ public class HotelEventManager extends JPanel {
     public void initializeTimer() {
         this.hotelEvents = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             hotelEvents.add(new HotelEvent(HotelEventType.SPAWN_GUEST, 3, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_IN, 5, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 10, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.GO_RESTAURANT, 30, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.GO_ROOM, 200, i, 0));
-            hotelEvents.add(new HotelEvent(HotelEventType.CHECK_OUT, 300, i, 0));
+
+//
         }
 
 

@@ -45,6 +45,7 @@ public abstract class Facility extends JPanel  {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 facility.mouseExited();
+                hotelEventManager.setInfoText(" ");
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 facility.mouseClicked();
@@ -54,7 +55,7 @@ public abstract class Facility extends JPanel  {
     }
 
     public void mouseExited () {this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));}
-    public void mouseEntered () { this.setBorder(new LineBorder(Color.YELLOW, 4));}
+    public void mouseEntered () { this.setBorder(new LineBorder(Color.YELLOW, 1));}
     public void mouseClicked() {}
 
 

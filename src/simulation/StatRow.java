@@ -19,6 +19,7 @@ public class StatRow extends JPanel {
     UnitType unit;
     Supplier<Integer> supplier;
     public StatRow(String statTitle, JPanel parent, UnitType unit, Supplier<Integer> supplier) {
+        parent.add(this);
         this.unit = unit;
         this.supplier = supplier;
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -30,6 +31,7 @@ public class StatRow extends JPanel {
 
         this.add(titleLabel);
         this.add(Box.createHorizontalGlue());
+        if (unit == null) return;
 
 
         if (this.unit == UnitType.PERCENTAGE_POSITIVE || this.unit == UnitType.PERCENTAGE_NEGATIVE) {
@@ -42,7 +44,7 @@ public class StatRow extends JPanel {
         this.setMaximumSize(new Dimension(Short.MAX_VALUE, this.getPreferredSize().height));
         this.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        parent.add(this);
+
     }
 
     public void createNumericalValueLabel() {

@@ -61,10 +61,6 @@ public class Simulation extends JPanel implements HotelEventListener {
         switch (hotelEvent.getEventType()) {
             case SPAWN_GUEST -> {
                 Tile tile = this.layout.getRandomTile(layout.getFacilitiesByType(FacilityType.LOBBY).getFirst());
-                System.out.println(tile.getRow());
-                System.out.println(tile.getColumn());
-                tile.setBackground(Color.GREEN);
-                System.out.println(tile);
                 Guest guest = new Guest(tile, this.layout, hotelEvent.getHumanId());
                 humans.add(guest);
             }
