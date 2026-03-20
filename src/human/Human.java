@@ -165,7 +165,6 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     public void update() {
         if (cooldown >= -10) {
             cooldown--;
-            System.out.println(cooldown);
         }
 
         if (hover) return;

@@ -110,7 +110,6 @@ public class EventPanel extends JPanel {
         tf.setMaximumSize(new Dimension(48, 16));
         tf.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
-                System.out.println(e.getKeyChar());
                 if (tf.getText().length() >= 3 || !isNumeric(e.getKeyChar()) ) // limit textfield to 3 characters
                     e.consume();
             }
@@ -121,7 +120,6 @@ public class EventPanel extends JPanel {
     public boolean isNumeric(Character number) {
         try {
             int check = Integer.parseInt(String.valueOf(number));
-            System.out.println(true);
             return true;
         } catch (NumberFormatException e) {
             return false;
