@@ -5,16 +5,11 @@ import enums.GuestStatus;
 import enums.Role;
 import enums.RoomStatus;
 import events.HotelEvent;
-import events.HotelEventType;
 import facility.Facility;
-import facility.Restaurant;
 import facility.Room;
 import facility.Tile;
 import layout.Layout;
-import settings.Settings;
-
 import java.awt.*;
-import java.util.ArrayDeque;
 
 
 public class Guest extends Human {
@@ -76,7 +71,7 @@ public class Guest extends Human {
         if (hotelEvent.getHumanId() != null && hotelEvent.getHumanId() != this.getId() && hotelEvent.getData() != 255) return;
 
         if (this.getDestination() != null) {
-            setCooldown(Settings.delay);
+            setCooldown(100);
             this.getEventQueue().add(hotelEvent);
             return;
         }
@@ -104,7 +99,7 @@ public class Guest extends Human {
                 this.removeRoom(this.getAssignedRoom());
             }
             case EVACUATE -> {
-                setCooldown(Settings.delay * 5);
+                setCooldown(100);
                 this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
             }
         }

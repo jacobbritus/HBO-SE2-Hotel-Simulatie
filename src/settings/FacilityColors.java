@@ -40,9 +40,8 @@ public final class FacilityColors {
         room.put(FacilityState.CLEANING1, new Color(225, 245, 254));
         room.put(FacilityState.CLEANING2, new Color(179, 229, 252));
 
-
         // --- Hall ---
-        hall.put(FacilityState.DEFAULT1, new Color(210, 209, 209));
+        hall.put(FacilityState.DEFAULT1, new Color(124, 124, 124));
         hall.put(FacilityState.DEFAULT2, new Color(58, 57, 57));
 
         // -- Lobby --
@@ -53,12 +52,11 @@ public final class FacilityColors {
         lift.put(FacilityState.DEFAULT1, new Color(222, 227, 231));
         lift.put(FacilityState.DEFAULT2, new Color(208, 208, 208));
 
-
         // --- Trap ---
         stairs.put(FacilityState.DEFAULT1, new Color(255, 248, 225));
         stairs.put(FacilityState.DEFAULT2, new Color(240, 230, 190));
 
-        // --- Trap ---
+        // --- Restaurant ---
         restaurant.put(FacilityState.DEFAULT1, new Color(225, 255, 252));
         restaurant.put(FacilityState.DEFAULT2, new Color(190, 240, 236));
 

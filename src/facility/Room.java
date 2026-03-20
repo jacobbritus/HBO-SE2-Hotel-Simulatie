@@ -34,8 +34,8 @@ public class Room extends Facility {
     private Color color1;
     private Color color2;
 
-    public Room(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager hotelEventManager) {
-        super(superPanel, type, row, column, hotelEventManager);
+    public Room(FacilityType type, int row, int column, HotelEventManager hotelEventManager) {
+        super(type, row, column, hotelEventManager);
         this.setStatus(RoomStatus.AVAILABLE);
     }
 

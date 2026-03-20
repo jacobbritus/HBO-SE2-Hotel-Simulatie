@@ -177,11 +177,13 @@ public class HotelEventManager extends JPanel {
 
     public void addControlButtons() {
         MyButton menuButton = new MyButton(null, null);
+        menuButton.setSelected(true);
 
         menuButton.addIcon(ImageHelper.getImage(
                 String.format("../images/%s/dockSidebar.png", Settings.colorTheme)
         ));
-        menuButton.setPreferredSize(new Dimension(48, 48));
+        menuButton.setPreferredSize(new Dimension(36, 36));
+        menuButton.setMaximumSize(new Dimension(36, 36));
 
         menuButton.addActionListener( e -> sidebar.toggle());
 

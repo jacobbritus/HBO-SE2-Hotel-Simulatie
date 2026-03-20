@@ -30,7 +30,7 @@ public class Simulation extends JPanel implements HotelEventListener {
         this.setSize(new Dimension(Settings.schermBreedte, Settings.schermHoogte));
         this.rauweGrid = rauweGrid;
         layoutBagroundPanel = new JPanel(new GridBagLayout());
-        layoutBagroundPanel.setBackground(new Color(54, 101, 44,255));
+        layoutBagroundPanel.setBackground(Settings.achtergrondKleur);
         layoutBagroundPanel.setOpaque(true);
         layoutBagroundPanel.setPreferredSize(new Dimension(Settings.schermBreedte , Settings.schermHoogte - 128 ));
     }

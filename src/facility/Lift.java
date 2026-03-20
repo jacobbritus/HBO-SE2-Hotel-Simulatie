@@ -7,8 +7,8 @@ import simulation.HotelEventManager;
 import javax.swing.*;
 
 public class Lift extends Facility {
-    public Lift(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager simC) {
-        super(superPanel, type, row, column, simC);
+    public Lift(FacilityType type, int row, int column, HotelEventManager simC) {
+        super(type, row, column, simC);
     }
 
     @Override

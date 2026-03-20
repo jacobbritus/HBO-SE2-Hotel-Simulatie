@@ -163,7 +163,7 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     public abstract boolean applyRandomMovement();
 
     public void update() {
-        if (cooldown >= -2) {
+        if (cooldown >= -10) {
             cooldown--;
             System.out.println(cooldown);
         }
@@ -174,8 +174,8 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
             this.move();
         } else {
             if (cooldown > 0 || !this.eventQueue.isEmpty() || !applyRandomMovement()) { return;}
-            cooldown = Settings.delay * 5;
             this.setDestination(layout.getRandomTile(null));
+            setCooldown(100);
         }
     }
 
@@ -193,9 +193,6 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
             this.setTile(tile, null);
             stepsTaken++;
             stepsTaken++;
-//            stepsTaken++;
-//            stepsTaken++;
-//            stepsTaken++;
         } else {
             Facility facility = destination.getFacility();
             this.stepsTaken = 0;

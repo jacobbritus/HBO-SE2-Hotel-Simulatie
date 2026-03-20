@@ -22,7 +22,7 @@ public abstract class Facility extends JPanel implements mouseInteractions  {
     private MouseAdapter mouseEvents;
     Tile[][] tiles;
 
-    public Facility(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager hotelEventManager) {
+    public Facility(FacilityType type, int row, int column, HotelEventManager hotelEventManager) {
         this.type = type;
         this.level = 1;
         this.row = row;
@@ -32,7 +32,6 @@ public abstract class Facility extends JPanel implements mouseInteractions  {
         this.setOpaque(true);
         this.hotelEventManager = hotelEventManager;
         this.addTiles();
-        superPanel.add(this);
         onMouseEvents();
     }
 
@@ -55,9 +54,8 @@ public abstract class Facility extends JPanel implements mouseInteractions  {
     }
 
     public void mouseExited () {this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));}
-    public void mouseEntered () { this.setBorder(new LineBorder(Color.YELLOW, 1));}
+    public void mouseEntered () { this.setBorder(new LineBorder(Color.YELLOW, 2));}
     public void mouseClicked() {}
-
 
     public FacilityType getType() {
         return type;

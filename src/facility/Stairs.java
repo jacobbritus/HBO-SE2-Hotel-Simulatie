@@ -6,8 +6,8 @@ import javax.swing.*;
 
 
 public class Stairs extends Facility {
-    public Stairs(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager simC) {
-        super(superPanel, type, row, column, simC);
+    public Stairs(FacilityType type, int row, int column, HotelEventManager simC) {
+        super(type, row, column, simC);
     }
 }
 

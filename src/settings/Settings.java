@@ -22,7 +22,7 @@ public final class Settings {
 //    public static Color textColor = Color.BLACK;
 //    public static Color textColor2 = Color.GRAY;
     public static String colorTheme = "dark";
-    public static Color achtergrondKleur = new Color(25, 25, 25, 255);
+    public static Color achtergrondKleur = new Color(23, 22, 22,255);
     public static Color themeColor = new Color(30, 30, 30,255);
     public static Color themeColor2 = new Color(40, 40, 40,255);
     public static Color themeColor3 = new Color(50, 50, 50,255);

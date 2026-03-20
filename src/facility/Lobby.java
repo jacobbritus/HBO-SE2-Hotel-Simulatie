@@ -5,8 +5,8 @@ import simulation.HotelEventManager;
 import javax.swing.*;
 
 public class Lobby extends Facility {
-    public Lobby(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager simC) {
-        super(superPanel, type, row, column, simC);
+    public Lobby(FacilityType type, int row, int column, HotelEventManager simC) {
+        super(type, row, column, simC);
     }
 
 //    @Override

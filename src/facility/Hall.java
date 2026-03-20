@@ -8,15 +8,10 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 public class Hall extends Facility {
-    public Hall(JPanel superPanel, FacilityType type, int row, int column, HotelEventManager simC) {
-        super(superPanel, type, row, column, simC);
+    public Hall(FacilityType type, int row, int column, HotelEventManager simC) {
+        super(type, row, column, simC);
 
-        setBorder(null);
+        setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT2), 2));
+        setBackground(this.getColor(FacilityState.DEFAULT1));
     }
-
-    @Override
-    public void mouseExited () {this.setBorder(new LineBorder(this.getColor(FacilityState.DEFAULT1), 2));}
-
-
-
 }

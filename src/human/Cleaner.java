@@ -58,7 +58,7 @@ public class Cleaner extends Human {
 
         if (this.getDestination() != null) {
             this.getEventQueue().add(hotelEvent);
-            setCooldown(Settings.delay);
+            setCooldown(100);
             return;
         }
 
@@ -78,7 +78,7 @@ public class Cleaner extends Human {
                 this.removeRoom(this.getAssignedRoom());
             }
             case EVACUATE -> {
-                setCooldown(Settings.delay * 5);
+                setCooldown(100);
                 this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
             }
         }

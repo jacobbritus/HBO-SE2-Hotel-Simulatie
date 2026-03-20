@@ -91,29 +91,18 @@ public class Layout extends JPanel {
 
     private void addFacilities(String[][] grid, HotelEventManager hotelEventManager) {
 
-
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
-
                 String string = grid[r][c];
-                FacilityType type = FacilityType.getSafe(string.toUpperCase());
-                Facility o = switch (FacilityType.getSafe(string.toUpperCase())) {
-                    case ROOM -> new Room(this, type, r, c, hotelEventManager);
-                    case LIFT -> new Lift(this, type, r, c, hotelEventManager);
-                    case STAIRS -> new Stairs(this, type, r, c, hotelEventManager);
-                    case LOBBY -> new Lobby(this, type, r, c, hotelEventManager);
-                    case HALL -> new Hall(this, type, r, c, hotelEventManager);
-                    case RESTAURANT -> new Restaurant(this, type, r, c, hotelEventManager);
-                    default -> null;
-                };
+                Facility o = FacilityType.constructFacility(string, this, r, c, hotelEventManager);
 
                 if (o == null) {
                     JPanel inaccessible = new JPanel();
-                    inaccessible.setBackground(new Color(54, 101, 44,255));
+                    inaccessible.setBackground(Settings.achtergrondKleur);
                     this.add(inaccessible);
                     continue;
                 } else {
-                    facilitiesMap.get(type).add(o);
+                    facilitiesMap.get(o.getType()).add(o);
                 }
 
                 facilities[r][c] = o;
