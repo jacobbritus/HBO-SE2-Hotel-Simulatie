@@ -1,9 +1,9 @@
 package events;
 
 public enum HotelEventType {
+    SPAWN_GUEST("Guest Arrived"),
     CHECK_IN("Guest Checked In"),
     CHECK_OUT("Guest Checked Out"),
-    SPAWN_GUEST("Guest Arrived"),
     ASSIGN_ROOM("Room Assigned"),
     GO_ROOM("Heading to Room"),
     SPAWN_CLEANER("Cleaner On Duty"),

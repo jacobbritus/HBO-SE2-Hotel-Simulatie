@@ -3,47 +3,111 @@ package simulation.tabs;
 import enums.FontWeight;
 import enums.TextSize;
 import events.HotelEvent;
+import events.HotelEventType;
+import helper.ImageHelper;
+import helper.MyButton;
 import helper.MyLabel;
 import helper.MyScrollPane;
 import settings.Settings;
 import simulation.HotelEventManager;
 
 
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.HashMap;
 
 public class EventsTab extends SidebarTab {
-    private JPanel eventsPanel;
-    private final HashMap<HotelEvent, JPanel> eventHistory;
+    private JPanel eventsContainer;
+    private HashMap<HotelEvent, JPanel> eventHistory;
+    private HashMap<HotelEventType, JPanel> eventForm;
+    private boolean customizing;
 
     public EventsTab(HotelEventManager hotelEventManager) {
         super(hotelEventManager);
-        addHeaderSection("Events");
+        addHeaderSection("Events", BoxLayout.X_AXIS);
         addUIdesign();
-        this.eventHistory = new HashMap<>();
-        JScrollPane scrollPane = createScrollPanel();
-        this.add(scrollPane);
+        eventForm = new HashMap<>();
 
-        for (HotelEvent hotelEvent : hotelEventManager.getHotelEvents()){
-            reactToEvent(hotelEvent);
-        }
+        MyButton customizeButton = new MyButton("Add", _ -> {
+            titleLabel.setText("New Event");
+            eventsContainer.removeAll();
+
+            if (customizing) {
+                getHotelEventManager().getHTEtimer().start();
+                customizing = false;
+                addExistingEvents();
+            } else {
+                hotelEventManager.getHTEtimer().stop();
+                customizing = true;
+                addNewEvent();
+            }
+            eventsContainer.revalidate();
+            eventsContainer.repaint();
+        });
+
+        customizeButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        this.topSection.add(customizeButton
+        );
+
+
+
+        JScrollPane scrollPane = createScrollPanel();
+        scrollPane.setPreferredSize(new Dimension(320, 320));
+        this.add(scrollPane);
+        addExistingEvents();
 
         this.repaint();
         this.revalidate();
     }
 
+    public void addNewEvent() {
+        for (HotelEventType type : HotelEventType.values()) {
+            HotelEvent event = new HotelEvent(type,
+                    hotelEventManager.getEventTicks() + 20,
+                    0,
+                    0);
+            EventPanel eventPanel = new EventPanel (event, true);
+
+            eventPanel.add(Box.createHorizontalGlue());
+            MyButton addbutton = new MyButton(null, _ -> {
+                hotelEventManager.getHTEtimer().start();
+                hotelEventManager.addHotelEvent(eventPanel.returnEvent());
+                eventsContainer.removeAll();
+                customizing = false;
+                addExistingEvents();
+            });
+            addbutton.setPreferredSize(new Dimension(28, 28));
+            addbutton.setMaximumSize(new Dimension(28, 28));
+            addbutton.addIcon(ImageHelper.getImage(
+                    String.format("../images/%s/addEvent.png", Settings.colorTheme)
+            ));
+            eventPanel.add(addbutton);
+            eventsContainer.add(eventPanel);
+            eventForm.put(type, eventPanel);
+        }
+    }
+
+    public void addExistingEvents() {
+        this.eventHistory = new HashMap<>();
+        for (HotelEvent e : hotelEventManager.getHotelEvents()){
+            reactToEvent(e);
+        }
+    }
+
     public MyScrollPane createScrollPanel() {
-        this.eventsPanel = new JPanel();
-        eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS)); // vertical list
-        eventsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        eventsPanel.setBackground(Settings.themeColor3);
-        eventsPanel.setOpaque(true);
-        MyScrollPane scrollPane = new MyScrollPane(eventsPanel);
+        this.eventsContainer = new JPanel();
+        eventsContainer.setLayout(new BoxLayout(eventsContainer, BoxLayout.Y_AXIS)); // vertical list
+        eventsContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        eventsContainer.setBackground(Settings.themeColor3);
+        eventsContainer.setOpaque(true);
+        MyScrollPane scrollPane = new MyScrollPane(eventsContainer);
         scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         return scrollPane;
@@ -54,18 +118,26 @@ public class EventsTab extends SidebarTab {
 
     @Override
     public void reactToEvent(HotelEvent hotelEvent) {
-        JPanel eventPanel = createEventPanel(hotelEvent);
-        if (!eventHistory.containsKey(hotelEvent)) {
-            this.eventsPanel.add(eventPanel);
+        JPanel eventPanel = new EventPanel(hotelEvent, false);
+        if (!eventHistory.containsKey(hotelEvent) && hotelEvent.getTime() >= getHotelEventManager().getEventTicks() ) {
+            this.eventsContainer.add(eventPanel);
         } else {
-            JPanel pastPanel = eventHistory.get(hotelEvent);
-            this.eventsPanel.remove(pastPanel);
+            JPanel pastPanel;
+            if (eventHistory.containsKey(hotelEvent)) {
+                pastPanel = eventHistory.get(hotelEvent);
+                this.eventsContainer.remove(pastPanel);
+            } {
+                pastEvent(eventPanel);
+                pastPanel = eventPanel;
+            }
             pastEvent(pastPanel);
-            this.eventsPanel.add(pastPanel);
+            this.eventsContainer.add(pastPanel);
         }
         eventHistory.put(hotelEvent, eventPanel);
-        eventsPanel.revalidate();
-        eventsPanel.repaint();
+
+
+        eventsContainer.revalidate();
+        eventsContainer.repaint();
 
     }
 
@@ -76,31 +148,6 @@ public class EventsTab extends SidebarTab {
         }
     }
 
-    public JPanel createEventPanel(HotelEvent hotelEvent) {
-        JPanel eventPanel = new JPanel();
-        eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.X_AXIS));
-        eventPanel.setBorder(new LineBorder(Color.RED, 4));
-
-        eventPanel.setOpaque(true);
-        eventPanel.setBackground(Settings.themeColor);
-
-        JLabel title = new MyLabel(hotelEvent.getEventType().getTitle(), FontWeight.MEDIUM, TextSize.SMALL);
-        eventPanel.add(title);
-        title.setPreferredSize(new Dimension(this.getPreferredSize().width   , 40));
-
-        eventPanel.add(Box.createHorizontalGlue());
-        JLabel a = new MyLabel("ID: " +hotelEvent.getHumanId().toString(), FontWeight.MEDIUM, TextSize.SMALL);
-        eventPanel.add(a);
-
-        eventPanel.add(Box.createHorizontalGlue());
-        JLabel b = new MyLabel("Tick: " + String.valueOf(hotelEvent.getTime()), FontWeight.MEDIUM, TextSize.SMALL);
-        eventPanel.add(b);
-
-        eventPanel.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0, 0, 1, 0,
-                Settings.themeColor2), new EmptyBorder(20, 20, 20, 20)));
-
-        return eventPanel;
-    }
 
 }
 
