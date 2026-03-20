@@ -11,6 +11,7 @@ import facility.Restaurant;
 import facility.Room;
 import facility.Tile;
 import layout.Layout;
+import settings.Settings;
 
 import java.awt.*;
 import java.util.ArrayDeque;
@@ -75,6 +76,7 @@ public class Guest extends Human {
         if (hotelEvent.getHumanId() != null && hotelEvent.getHumanId() != this.getId() && hotelEvent.getData() != 255) return;
 
         if (this.getDestination() != null) {
+            setCooldown(Settings.delay);
             this.getEventQueue().add(hotelEvent);
             return;
         }
@@ -100,6 +102,10 @@ public class Guest extends Human {
                 if (this.getAssignedRoom() == null) return;
                 this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
                 this.removeRoom(this.getAssignedRoom());
+            }
+            case EVACUATE -> {
+                setCooldown(Settings.delay * 5);
+                this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
             }
         }
     }

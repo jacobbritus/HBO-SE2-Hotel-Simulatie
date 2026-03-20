@@ -109,7 +109,7 @@ public class Layout extends JPanel {
 
                 if (o == null) {
                     JPanel inaccessible = new JPanel();
-                    inaccessible.setBackground(Settings.achtergrondKleur);
+                    inaccessible.setBackground(new Color(54, 101, 44,255));
                     this.add(inaccessible);
                     continue;
                 } else {

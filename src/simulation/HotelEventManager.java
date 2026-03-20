@@ -68,17 +68,26 @@ public class HotelEventManager extends JPanel {
         return hotelEvents;
     }
 
+    public void addHotelEvent(HotelEvent hotelEvent) {
+        this.hotelEvents.add(hotelEvent);
+        hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
+    }
+
+    public void removeHotelEvent(HotelEvent hotelEvent) {
+        this.hotelEvents.remove(hotelEvent);
+        hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
+    }
+
     public Timer getHTEtimer() {
         return HTEtimer;
     }
 
-    public int getEventTicks() {
-        return eventTicks;
+    public boolean isStarted() {
+        return started;
     }
 
-    public void addHotelEvent(HotelEvent hotelEvent) {
-        this.hotelEvents.add(hotelEvent);
-        hotelEvents.sort(Comparator.comparing(HotelEvent::getTime));
+    public int getEventTicks() {
+        return eventTicks;
     }
 
     public void setInfoText(String text) {

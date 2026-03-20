@@ -42,8 +42,8 @@ public final class FacilityColors {
 
 
         // --- Hall ---
-        hall.put(FacilityState.DEFAULT1, new Color(241, 220, 193));
-        hall.put(FacilityState.DEFAULT2, new Color(238, 200, 157));
+        hall.put(FacilityState.DEFAULT1, new Color(210, 209, 209));
+        hall.put(FacilityState.DEFAULT2, new Color(58, 57, 57));
 
         // -- Lobby --
         lobby.put(FacilityState.DEFAULT1, new Color(251, 225, 254));

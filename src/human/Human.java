@@ -9,6 +9,7 @@ import facility.Room;
 import facility.Tile;
 import facility.mouseInteractions;
 import layout.Layout;
+import settings.Settings;
 
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -20,12 +21,14 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     private int stepsTaken;
     private ArrayList<Tile> destinationPath;
     private Tile destination;
+
+    private final int id;
     private Room assignedRoom;
     private final Role role;
     private boolean isReadyToDespawn;
-    private final int id;
     private final ArrayDeque<HotelEvent> eventQueue;
-    private int cooldown = 300;
+
+    private int cooldown = 0;
     private boolean hover = false;
     private MouseAdapter mousevents;
 
@@ -84,9 +87,9 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     public void mouseClicked() {
         System.out.println("yes");
         hover = false;
-        this.notify(new HotelEvent(HotelEventType.ASSIGN_ROOM, 0, this.id, 0));
-//        this.notify(new HotelEvent(HotelEventType.GO_ROOM, 0, 0, 0));
+        this.notify(new HotelEvent(HotelEventType.CHECK_IN, 0, this.id, 0));
     }
+
 
 
     public int getId() {
@@ -128,6 +131,10 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
         this.getPathToDestination(destination);
     }
 
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
+
     void applyTileMouseInteraction(boolean apply) {
         if (apply) {
             for (Tile tile : tile.getNeighbours()) {
@@ -158,6 +165,7 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
     public void update() {
         if (cooldown >= -2) {
             cooldown--;
+            System.out.println(cooldown);
         }
 
         if (hover) return;
@@ -165,8 +173,8 @@ public abstract class Human implements RoomOccupant, HotelEventListener, mouseIn
         if (this.getDestinationPath() != null) {
             this.move();
         } else {
-            if (cooldown > 0 && !this.eventQueue.isEmpty() || !applyRandomMovement()) { return;}
-            cooldown = 200;
+            if (cooldown > 0 || !this.eventQueue.isEmpty() || !applyRandomMovement()) { return;}
+            cooldown = Settings.delay * 5;
             this.setDestination(layout.getRandomTile(null));
         }
     }

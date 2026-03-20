@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.util.HashMap;
 
-public abstract class Facility extends JPanel  {
+public abstract class Facility extends JPanel implements mouseInteractions  {
     private final FacilityType type;
     private final int row;
     private final int column;

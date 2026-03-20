@@ -9,7 +9,8 @@ public enum HotelEventType {
     SPAWN_CLEANER("Cleaner On Duty"),
     CLEAN_ROOM("Room Service Complete"),
     GO_DIRTY_ROOM("Cleaning in Progress"),
-    GO_RESTAURANT("Heading to Restaurant");
+    GO_RESTAURANT("Heading to Restaurant"),
+    EVACUATE("Evacuate Everyone");
 
     private final String title;
 

@@ -8,6 +8,7 @@ import facility.Facility;
 import facility.Room;
 import facility.Tile;
 import layout.Layout;
+import settings.Settings;
 
 import java.awt.*;
 
@@ -57,6 +58,7 @@ public class Cleaner extends Human {
 
         if (this.getDestination() != null) {
             this.getEventQueue().add(hotelEvent);
+            setCooldown(Settings.delay);
             return;
         }
 
@@ -74,6 +76,10 @@ public class Cleaner extends Human {
                 if (this.getAssignedRoom() == null) return;
                 this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
                 this.removeRoom(this.getAssignedRoom());
+            }
+            case EVACUATE -> {
+                setCooldown(Settings.delay * 5);
+                this.setDestination(this.getLayout().getRandomTile(this.getLayout().getFacilitiesByType(FacilityType.LOBBY).getFirst()));
             }
         }
     }

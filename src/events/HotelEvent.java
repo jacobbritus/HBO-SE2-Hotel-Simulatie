@@ -11,6 +11,15 @@ public class HotelEvent {
         this.time = time;
         this.humanId = humanId;
         this.data = data;
+        defaultValues();
+    }
+
+    public void defaultValues() {
+        switch (eventType) {
+            case EVACUATE -> {
+                this.data = 255;
+            }
+        }
     }
 
     public HotelEventType getEventType() {

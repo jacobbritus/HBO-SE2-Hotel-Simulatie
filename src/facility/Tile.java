@@ -2,6 +2,7 @@ package facility;
 
 import enums.Direction;
 import enums.FacilityState;
+import enums.FacilityType;
 import human.Human;
 import settings.Settings;
 
@@ -36,7 +37,7 @@ public class Tile extends JLabel {
         this.neighbours.put(Direction.RIGHT, null);
         this.setOpaque(true);
         this.isEven = isEven;
-        if (isEven || !Settings.setSquaresAlternatingColors) {
+        if (isEven || !Settings.setSquaresAlternatingColors && this.getFacility().getType() != FacilityType.HALL) {
             this.setBackground(facility.getColor(FacilityState.DEFAULT1));
             this.color = facility.getColor(FacilityState.DEFAULT1);
         } else {
